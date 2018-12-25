@@ -1,4 +1,4 @@
-package CCH.controller;
+package CCH.controller.operacaoFabril;
 
 import CCH.CarConfiguratorHubApplication;
 import CCH.business.Componente;
@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.*;
@@ -18,12 +19,15 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OperacaoFabrilController {
+public class IndexController {
     @FXML
     public TableView table;
 
     @FXML
     public Label idEncomenda;
+
+    @FXML
+    public Button back;
 
     private OperacaoFabril operacaoFabril = CarConfiguratorHubApplication.getCch().getOperacaoFabril();
 
@@ -73,7 +77,7 @@ public class OperacaoFabrilController {
         try {
             int encomendaId = Integer.parseInt(idEncomenda.getText());
             operacaoFabril.removerEncomenda(encomendaId);
-        } catch (Exception e) { }
+        } catch (Exception e) {e.printStackTrace();}
 
         try {
             Encomenda encomenda = operacaoFabril.consultarProximaEncomenda();
@@ -96,5 +100,10 @@ public class OperacaoFabrilController {
             }
 
             table.refresh();
+    }
+
+    @FXML
+    public void back() {
+        back.getScene().getWindow().hide();
     }
 }

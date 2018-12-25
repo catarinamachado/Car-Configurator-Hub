@@ -28,6 +28,9 @@ public class LoginController {
     @FXML
     public PasswordField passwordField;
 
+    @FXML
+    public Button back;
+
     private CCH cch = CarConfiguratorHubApplication.getCch();
 
     public void login() {
@@ -64,9 +67,15 @@ public class LoginController {
     private void redirectTo(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
 
-        Stage stage = (Stage) loginButton.getScene().getWindow();
-        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initOwner(loginButton.getScene().getWindow());
+        stage.setScene(new Scene(loader.load()));
 
-        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    @FXML
+    public void back() {
+        back.getScene().getWindow().hide();
     }
 }

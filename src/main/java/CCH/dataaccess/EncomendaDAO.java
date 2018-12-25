@@ -66,10 +66,10 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
         try {
             Encomenda al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE FROM Encomenda WHERE id = " + key;
+            String sql = "DELETE FROM Encomenda_has_Componente WHERE Encomenda_id = " + key;
             int i  = stm.executeUpdate(sql);
 
-            sql = "DELETE FROM Encomenda_has_Componente WHERE Encomenda_id = " + key;
+            sql = "DELETE FROM Encomenda WHERE id = " + key;
             i  = stm.executeUpdate(sql);
 
             return al;

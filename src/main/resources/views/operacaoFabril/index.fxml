@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.OperacaoFabrilController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.operacaoFabril.IndexController">
    <children>
       <TableView fx:id="table" layoutX="60.0" layoutY="36.0" prefHeight="253.0" prefWidth="480">
         <columns>
-          <TableColumn prefWidth="160.0" text="Componente" />
-          <TableColumn onEditCommit="#updateStock" prefWidth="153.0" text="Stock" />
-          <TableColumn prefWidth="160.0" text="Preço" />
+          <TableColumn prefWidth="160.0" text="Componente" style="-fx-alignment: center;" />
+          <TableColumn onEditCommit="#updateStock" prefWidth="153.0" text="Stock" style="-fx-alignment: center;"/>
+          <TableColumn prefWidth="160.0" text="Preço" style="-fx-alignment: center;" />
         </columns>
       </TableView>
       <Label layoutX="50.0" layoutY="305.0" text="Próxima encomenda:">
@@ -27,5 +27,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="back" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
    </children>
 </Pane>

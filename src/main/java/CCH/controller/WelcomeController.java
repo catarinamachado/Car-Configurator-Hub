@@ -32,9 +32,10 @@ public class WelcomeController {
     public void onLoginButtonClick() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
 
-        Stage stage = (Stage) loginButton.getScene().getWindow();
-        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initOwner(logo.getScene().getWindow());
+        stage.setScene(new Scene(loader.load()));
 
-        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

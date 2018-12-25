@@ -1,9 +1,6 @@
 package CCH;
 
 import CCH.business.CCH;
-import CCH.business.GestaoDeConfiguracao;
-import CCH.business.OperacaoFabril;
-import CCH.business.Utilizador;
 import CCH.dataaccess.CCHConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

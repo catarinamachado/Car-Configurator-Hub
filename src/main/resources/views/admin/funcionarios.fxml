@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<?import javafx.scene.control.Button?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.admin.ComponentesController">
+    <children>
+        <TableView fx:id="table" layoutX="41.0" layoutY="29.0" prefHeight="289.0" prefWidth="519.0">
+            <columns>
+                <TableColumn prefWidth="70.0" style="-fx-alignment: center;" text="User" />
+                <TableColumn prefWidth="139.0" style="-fx-alignment: center;" text="Password" />
+                <TableColumn prefWidth="139.0" style="-fx-alignment: center;" text="Nome" />
+                <TableColumn prefWidth="119.0" style="-fx-alignment: center;" text="Tipo" />
+                <TableColumn prefWidth="47.0" style="-fx-alignment: center;" />
+            </columns>
+        </TableView>
+        <Button fx:id="back" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
+    </children>
+</Pane>

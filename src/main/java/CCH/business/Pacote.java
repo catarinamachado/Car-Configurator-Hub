@@ -65,4 +65,8 @@ public class Pacote {
 		throw new UnsupportedOperationException();
 	}
 
+	public String getNome() {
+		return "Pacote " + id;
+	}
+
 }

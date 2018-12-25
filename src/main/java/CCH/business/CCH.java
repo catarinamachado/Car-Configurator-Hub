@@ -4,6 +4,7 @@ import CCH.dataaccess.ComponenteDAO;
 import CCH.dataaccess.PacoteDAO;
 import CCH.dataaccess.UtilizadorDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CCH {
@@ -85,8 +86,7 @@ public class CCH {
 	 * @param pacoteId
 	 */
 	public void removerPacote(int pacoteId) {
-		// TODO - implement CCH.removerPacote
-		throw new UnsupportedOperationException();
+		pacoteDAO.remove(pacoteId);
 	}
 
 	public List<Utilizador> consultarFuncionarios() {
@@ -112,5 +112,9 @@ public class CCH {
 	public void removerFuncionario(int utilizadorId) {
 		// TODO - implement CCH.removerFuncionario
 		throw new UnsupportedOperationException();
+	}
+
+	public List<Pacote> consultarPacotes() {
+		return new ArrayList<>(pacoteDAO.values());
 	}
 }
