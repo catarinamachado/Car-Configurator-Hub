@@ -62,7 +62,7 @@ public class UtilizadorDAO implements Map<Integer, Utilizador> {
         try {
             Utilizador al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE " + key + " FROM Utilizador";
+            String sql = "DELETE FROM Utilizador WHERE id = " + key;;
             int i  = stm.executeUpdate(sql);
             return al;
         }

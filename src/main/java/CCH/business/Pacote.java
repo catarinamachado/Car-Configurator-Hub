@@ -1,6 +1,10 @@
 package CCH.business;
 
 import CCH.dataaccess.ComponenteDAO;
+import CCH.dataaccess.PacoteDAO;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Pacote {
 
@@ -39,7 +43,7 @@ public class Pacote {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param componenteId
 	 */
 	public Componente adicionarComponente(int componenteId) {
@@ -48,7 +52,7 @@ public class Pacote {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param componenteId
 	 */
 	public void removerComponente(int componenteId) {

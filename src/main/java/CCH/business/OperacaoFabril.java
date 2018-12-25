@@ -1,31 +1,57 @@
 package CCH.business;
 
-import java.util.List;
+import CCH.dataaccess.ComponenteDAO;
+import CCH.dataaccess.EncomendaDAO;
+import CCH.exception.SemEncomendasDisponiveisException;
+
+import java.util.*;
 
 public class OperacaoFabril {
 
+	private EncomendaDAO encomendaDAO;
+	private ComponenteDAO componenteDAO;
+
 	public OperacaoFabril() {
-		// TODO - implement OperacaoFabril.OperacaoFabril
-		throw new UnsupportedOperationException();
+		this.encomendaDAO = new EncomendaDAO();
+		this.componenteDAO = new ComponenteDAO();
 	}
 
 	public List<Componente> consultarComponentes() {
-		// TODO - implement OperacaoFabril.consultarComponentes
-		throw new UnsupportedOperationException();
+		return new ArrayList<>(componenteDAO.values());
 	}
 
-	public Encomenda consultarProximaEncomenda() {
-		// TODO - implement OperacaoFabril.consultarProximaEncomenda
-		throw new UnsupportedOperationException();
+	public Encomenda consultarProximaEncomenda() throws SemEncomendasDisponiveisException {
+		Collection<Encomenda> sorted = new TreeMap<>(encomendaDAO.getAll()).values();
+
+		for (Encomenda encomenda : sorted) {
+			boolean available = true;
+			Collection<Componente> componentes = encomendaDAO.getComponentes(encomenda.getId()).values();
+
+			for (Componente componente : componentes) {
+				if (componente.getStock() <= 0) {
+					available = false;
+					break;
+				}
+			}
+
+			if (available) {
+				return encomenda;
+			}
+		}
+
+		throw new SemEncomendasDisponiveisException();
 	}
 
 	/**
-	 * 
-	 * @param e
+	 *
+	 * @param id
 	 */
-	public void adiconarEncomenda(Encomenda e) {
-		// TODO - implement OperacaoFabril.adiconarEncomenda
-		throw new UnsupportedOperationException();
+	public void removerEncomenda(Integer id) {
+		encomendaDAO.remove(id);
 	}
 
+	public Encomenda atualizarStock(Componente componente) throws SemEncomendasDisponiveisException  {
+		componenteDAO.updateStock(componente);
+		return consultarProximaEncomenda();
+	}
 }

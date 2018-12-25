@@ -40,7 +40,7 @@ public class Utilizador {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param nome
 	 * @param password
 	 * @param tipo
@@ -65,13 +65,12 @@ public class Utilizador {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @param password
 	 */
 	public boolean validarCredenciais(int id, String password) {
-		// TODO - implement Utilizador.validarCredenciais
-		throw new UnsupportedOperationException();
+		return this.id == id && this.password.equals(password);
 	}
 
 }

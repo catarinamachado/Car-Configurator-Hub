@@ -66,8 +66,12 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
         try {
             Encomenda al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE " + key + " FROM Encomenda";
+            String sql = "DELETE FROM Encomenda WHERE id = " + key;
             int i  = stm.executeUpdate(sql);
+
+            sql = "DELETE FROM Encomenda_has_Componente WHERE Encomenda_id = " + key;
+            i  = stm.executeUpdate(sql);
+
             return al;
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
@@ -101,7 +105,9 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
 
             return col;
         }
-        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
     }
 
     public Map<Integer, Encomenda> getAll() {
@@ -113,15 +119,16 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
         return hashmap;
     }
 
-    public Map<Integer, Componente> getComponentes(Integer configuracaoId) {
+    public Map<Integer, Componente> getComponentes(Integer encomendaId) {
         try {
-            Map<Integer, Componente> componentes = null;
+            Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
-            String sql = "SELECT * FROM Encomenda_has_Componente WHERE Encomenda_id=" + configuracaoId;
+            String sql = "SELECT * FROM Encomenda_has_Componente WHERE Encomenda_id=" + encomendaId;
             ResultSet rs = stm.executeQuery(sql);
 
+            ComponenteDAO componenteDAO = new ComponenteDAO();
             if (rs.next()) {
-                Componente componente = new ComponenteDAO().get(rs.getInt(2));
+                Componente componente = componenteDAO.get(rs.getInt(2));
                 componentes.put(componente.getId(), componente);
             }
 

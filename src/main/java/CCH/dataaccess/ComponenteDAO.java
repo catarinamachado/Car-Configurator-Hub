@@ -2,6 +2,7 @@ package CCH.dataaccess;
 
 import CCH.business.ClasseComponente;
 import CCH.business.Componente;
+import ch.qos.logback.core.encoder.EchoEncoder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -122,6 +123,21 @@ public class ComponenteDAO implements Map<Integer, Componente> {
             return componentes;
         }
         catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public Componente updateStock(Componente componente) {
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeUpdate("UPDATE Componente SET stock = " +
+                    componente.getStock() +
+                    " WHERE id = " +
+                    componente.getId() +
+                    ";");
+
+            return get(componente.getId());
+        } catch (Exception e) {
             throw new NullPointerException(e.getMessage());
         }
     }

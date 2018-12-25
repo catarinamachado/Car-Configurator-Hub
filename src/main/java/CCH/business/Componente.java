@@ -1,6 +1,9 @@
 package CCH.business;
 
-import java.util.*;
+import CCH.dataaccess.ComponenteDAO;
+
+import java.util.Collection;
+import java.util.List;
 
 public class Componente {
 
@@ -11,6 +14,24 @@ public class Componente {
 	private int stock;
 	private double preco;
 	private String nome;
+
+	private static int nextId = 1;
+
+	private ComponenteDAO componenteDAO = new ComponenteDAO();
+
+	public Componente(int id, int stock, double preco, String nome, ClasseComponente classeComponente) {
+		this.requeridos = null;
+		this.incompativeis = null;
+		this.id = id;
+		this.stock = stock;
+		this.preco = preco;
+		this.nome = nome;
+		this.classeComponente = classeComponente;
+	}
+
+	public static int getNextId() {
+		return nextId++;
+	}
 
 	public int getId() {
 		return this.id;
@@ -68,11 +89,12 @@ public class Componente {
 		this.incompativeis = incompativeis;
 	}
 
-	public Componente(int id, int stock, double preco, String nome, ClasseComponente classeComponente) {
-		this.id = id;
-		this.stock = stock;
-		this.preco = preco;
-		this.nome = nome;
-		this.classeComponente = classeComponente;
+
+	public String getFullName() {
+		return classeComponente.getNome() + " " + nome;
+	}
+
+	public String getStockString() {
+		return Integer.toString(stock);
 	}
 }

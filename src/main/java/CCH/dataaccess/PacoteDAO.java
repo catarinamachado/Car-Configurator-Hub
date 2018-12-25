@@ -65,7 +65,7 @@ public class PacoteDAO implements Map<Integer, Pacote> {
         try {
             Pacote al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE " + key + " FROM Pacote";
+            String sql = "DELETE FROM Pacote WHERE id = " + key;
             int i  = stm.executeUpdate(sql);
             return al;
         }

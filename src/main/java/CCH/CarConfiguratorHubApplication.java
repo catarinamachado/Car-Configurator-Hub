@@ -1,12 +1,14 @@
 package CCH;
 
+import CCH.business.CCH;
+import CCH.business.GestaoDeConfiguracao;
+import CCH.business.OperacaoFabril;
+import CCH.business.Utilizador;
 import CCH.dataaccess.CCHConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +23,11 @@ public class CarConfiguratorHubApplication extends Application {
 	@Autowired
 	private Environment env;
 
+	private static CCH cch;
+	public static CCH getCch() {
+		return cch;
+	}
+
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
 
@@ -29,7 +36,7 @@ public class CarConfiguratorHubApplication extends Application {
 		SpringApplicationBuilder builder = new SpringApplicationBuilder(CarConfiguratorHubApplication.class);
 		context = builder.run(getParameters().getRaw().toArray(new String[0]));
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/templates/tipoUtilizador/index.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/welcome.fxml"));
 		loader.setControllerFactory(context::getBean);
 		rootNode = loader.load();
 	}
@@ -42,15 +49,13 @@ public class CarConfiguratorHubApplication extends Application {
 				env.getProperty("spring.datasource.username"),
 				env.getProperty("spring.datasource.password")
 		);
+
+		cch = new CCH();
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
-		Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-		double width = visualBounds.getWidth();
-		double height = visualBounds.getHeight();
-
-		primaryStage.setScene(new Scene(rootNode, width, height));
+		primaryStage.setScene(new Scene(rootNode, 600, 400));
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 	}

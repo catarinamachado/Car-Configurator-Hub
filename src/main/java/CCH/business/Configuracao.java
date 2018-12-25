@@ -62,7 +62,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param precoMaximo
 	 */
 	public List<Componente> gerarConfiguracaoOtima(double precoMaximo) {
@@ -71,7 +71,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param componenteId
 	 */
 	public Componente adiconarComponente(int componenteId) {
@@ -80,7 +80,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param componenteId
 	 */
 	public void removerComponente(int componenteId) {
@@ -89,7 +89,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param pacoteId
 	 */
 	public void adicionarPacote(int pacoteId) {
@@ -103,7 +103,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tipoComponente
 	 */
 	public List<Componente> consultarComponentes(TipoComponente tipoComponente) {
@@ -112,7 +112,7 @@ public class Configuracao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param componentes
 	 */
 	public void aceitarConfiguracaoOtima(List<Componente> componentes) {

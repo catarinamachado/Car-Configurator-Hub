@@ -68,7 +68,7 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         try {
             Configuracao al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE " + key + " FROM Configuracao";
+            String sql = "DELETE FROM Configuracao WHERE id = " + key;
             int i  = stm.executeUpdate(sql);
             return al;
         }

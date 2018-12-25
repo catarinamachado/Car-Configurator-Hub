@@ -1,17 +1,68 @@
 package CCH.business;
 
-import CCH.dataaccess.*;
+import CCH.dataaccess.ComponenteDAO;
+import CCH.dataaccess.PacoteDAO;
+import CCH.dataaccess.UtilizadorDAO;
 
 import java.util.List;
 
 public class CCH {
+	private GestaoDeConfiguracao gestaoDeConfiguracao;
+	private OperacaoFabril operacaoFabril;
+	private UtilizadorDAO utilizadorDAO;
+	private PacoteDAO pacoteDAO;
+	private ComponenteDAO componenteDAO;
 
-	private GestaoDeConfiguracao gestao_de_configuracao;
-	private UtilizadorDAO utilizadores;
-	private OperacaoFabril operacao_fabril;
+	public CCH() {
+		this.operacaoFabril = new OperacaoFabril();
+		this.gestaoDeConfiguracao = new GestaoDeConfiguracao();
+		this.utilizadorDAO = new UtilizadorDAO();
+		this.pacoteDAO = new PacoteDAO();
+		this.componenteDAO = new ComponenteDAO();
+	}
+
+	public GestaoDeConfiguracao getGestaoDeConfiguracao() {
+		return gestaoDeConfiguracao;
+	}
+
+	public void setGestaoDeConfiguracao(GestaoDeConfiguracao gestaoDeConfiguracao) {
+		this.gestaoDeConfiguracao = gestaoDeConfiguracao;
+	}
+
+	public OperacaoFabril getOperacaoFabril() {
+		return operacaoFabril;
+	}
+
+	public void setOperacaoFabril(OperacaoFabril operacaoFabril) {
+		this.operacaoFabril = operacaoFabril;
+	}
+
+	public UtilizadorDAO getUtilizadorDAO() {
+		return utilizadorDAO;
+	}
+
+	public void setUtilizadorDAO(UtilizadorDAO utilizadorDAO) {
+		this.utilizadorDAO = utilizadorDAO;
+	}
+
+	public PacoteDAO getPacoteDAO() {
+		return pacoteDAO;
+	}
+
+	public void setPacoteDAO(PacoteDAO pacoteDAO) {
+		this.pacoteDAO = pacoteDAO;
+	}
+
+	public ComponenteDAO getComponenteDAO() {
+		return componenteDAO;
+	}
+
+	public void setComponenteDAO(ComponenteDAO componenteDAO) {
+		this.componenteDAO = componenteDAO;
+	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @param password
 	 */
@@ -21,7 +72,7 @@ public class CCH {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param pacote
 	 */
 	public void criarPacote(Pacote pacote) {
@@ -30,7 +81,7 @@ public class CCH {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param pacoteId
 	 */
 	public void removerPacote(int pacoteId) {
@@ -44,7 +95,7 @@ public class CCH {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param nome
 	 * @param password
 	 * @param tipo
@@ -55,22 +106,11 @@ public class CCH {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param utilizadorId
 	 */
 	public void removerFuncionario(int utilizadorId) {
 		// TODO - implement CCH.removerFuncionario
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * 
-	 * @param componenteId
-	 * @param nrComponentes
-	 */
-	public void atualizarStock(int componenteId, int nrComponentes) {
-		// TODO - implement CCH.atualizarStock
-		throw new UnsupportedOperationException();
-	}
-
 }

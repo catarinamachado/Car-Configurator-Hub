@@ -85,8 +85,12 @@ public class Encomenda {
 	 * @param emailCliente
 	 */
 	public Encomenda(int id, String nomeCliente, String numeroDeIdentificacaoCliente, String moradaCliente, String paisCliente, String emailCliente) {
-		// TODO - implement Encomenda.Encomenda
-		throw new UnsupportedOperationException();
+		this.id = id;
+		this.nomeCliente = nomeCliente;
+		this.numeroDeIdentificacaoCliente = numeroDeIdentificacaoCliente;
+		this.moradaCliente = moradaCliente;
+		this.paisCliente = paisCliente;
+		this.emailCliente = emailCliente;
 	}
 
 }
