@@ -5,17 +5,18 @@
 <?import javafx.scene.layout.Pane?>
 
 <?import javafx.scene.control.Button?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.admin.ComponentesController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.admin.FuncionariosController">
     <children>
         <TableView fx:id="table" layoutX="41.0" layoutY="29.0" prefHeight="289.0" prefWidth="519.0">
             <columns>
-                <TableColumn prefWidth="70.0" style="-fx-alignment: center;" text="User" />
-                <TableColumn prefWidth="139.0" style="-fx-alignment: center;" text="Password" />
-                <TableColumn prefWidth="139.0" style="-fx-alignment: center;" text="Nome" />
-                <TableColumn prefWidth="119.0" style="-fx-alignment: center;" text="Tipo" />
-                <TableColumn prefWidth="47.0" style="-fx-alignment: center;" />
+                <TableColumn onEditCommit="#updateUser" prefWidth="129.0" text="User" style="-fx-alignment: center;"/>
+                <TableColumn onEditCommit="#updatePassword" prefWidth="70.0" text="Password" style="-fx-alignment: center;"/>
+                <TableColumn prefWidth="129.0" style="-fx-alignment: center;" text="Nome" />
+                <TableColumn onEditCommit="#updateTipo" prefWidth="89.0" text="Tipo" style="-fx-alignment: center;"/>
+                <TableColumn prefWidth="97.0" style="-fx-alignment: center;" />
             </columns>
         </TableView>
         <Button fx:id="back" style="-fx-background-color: #f3f3f3;" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
+        <Button onMouseReleased="#add" layoutX="41.0" layoutY="349.0" mnemonicParsing="false" text="Adicionar" />
     </children>
 </Pane>

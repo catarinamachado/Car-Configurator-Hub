@@ -213,4 +213,5 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
     public Set<Integer> keySet() {
         throw new NullPointerException("Not implemented!");
     }
+
 }

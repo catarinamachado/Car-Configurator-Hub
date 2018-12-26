@@ -13,6 +13,21 @@ public class UtilizadorDAO implements Map<Integer, Utilizador> {
         conn = CCHConnection.getConnection();
     }
 
+    public int getNextId() {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "SELECT id FROM Utilizador ORDER BY id DESC LIMIT 1;";
+            ResultSet rs = stm.executeQuery(sql);
+
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+
+            return 0;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
     public boolean containsKey(Object key) throws NullPointerException {
         try {
             Statement stm = conn.createStatement();
@@ -139,5 +154,48 @@ public class UtilizadorDAO implements Map<Integer, Utilizador> {
     public Set<Integer> keySet() {
         throw new NullPointerException("Not implemented!");
     }
+
+    public void updateUser(Utilizador utilizador) {
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeUpdate("UPDATE Utilizador SET nome = '" +
+                    utilizador.getNome() +
+                    "' WHERE id = " +
+                    utilizador.getId() +
+                    ";");
+
+        } catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void updatePassword(Utilizador utilizador) {
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeUpdate("UPDATE Utilizador SET password = " +
+                    utilizador.getPassword() +
+                    " WHERE id = " +
+                    utilizador.getId() +
+                    ";");
+
+        } catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void updateTipo(Utilizador utilizador) {
+        try {
+            Statement stm = conn.createStatement();
+            stm.executeUpdate("UPDATE Utilizador SET TipoUtilizador = " +
+                    utilizador.getTipoUtilizador().getValue() +
+                    " WHERE id = " +
+                    utilizador.getId() +
+                    ";");
+
+        } catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
 }
 
