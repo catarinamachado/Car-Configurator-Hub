@@ -149,6 +149,40 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         }
     }
 
+    public Pacote addPacote(Integer configuracaoId, Integer pacoteId) {
+        try {
+            Statement stm = conn.createStatement();
+
+            String sql = "INSERT Configuracao_has_Pacote VALUE (" +
+                    configuracaoId +
+                    "," +
+                    pacoteId +
+                    ");";
+
+            int i  = stm.executeUpdate(sql);
+            return pacoteDAO.get(pacoteId);
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void removePacote(Integer configuracaoId, Integer pacoteId) {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "DELETE FROM Configuracao_has_Pacote WHERE Configuracao_id=" +
+                    configuracaoId +
+                    " AND Pacote_id=" +
+                    pacoteId +
+                    ";";
+
+            int i = stm.executeUpdate(sql);
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
     public Map<Integer, Componente> getComponentes(Integer configuracaoId) {
         try {
             Map<Integer, Componente> componentes = new HashMap<>();
@@ -162,6 +196,24 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
             }
 
             return componentes;
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public Componente addComponente(Integer configuracaoId, Integer componenteId) {
+        try {
+            Statement stm = conn.createStatement();
+
+            String sql = "INSERT Configuracao_has_Componente VALUE (" +
+                    configuracaoId +
+                    "," +
+                    componenteId +
+                    ");";
+
+            int i  = stm.executeUpdate(sql);
+            return componenteDAO.get(componenteId);
         }
         catch (Exception e) {
             throw new NullPointerException(e.getMessage());

@@ -3,11 +3,9 @@ package CCH.business;
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
+import ilog.concert.IloException;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Configuracao {
 
@@ -18,6 +16,8 @@ public class Configuracao {
 	private Map<Integer, Pacote> pacotes;
 
 	private ConfiguracaoDAO configuracaoDAO = new ConfiguracaoDAO();
+
+
 
 	public int getId() {
 		return this.id;
@@ -65,13 +65,39 @@ public class Configuracao {
 		this.desconto = desconto;
 	}
 
-	/**
-	 *
-	 * @param precoMaximo
-	 */
-	public List<Componente> gerarConfiguracaoOtima(double precoMaximo) {
-		// TODO - implement Configuracao.gerarConfiguracaoOtima
-		throw new UnsupportedOperationException();
+	public Configuracao() {
+		this.id = configuracaoDAO.getNextId();
+		this.preco = 0;
+		this.desconto = 0;
+		componentes = new HashMap<>();
+		pacotes = new HashMap<>();
+	}
+
+	public Configuracao gerarConfiguracaoOtima(
+			List<Componente> componentesObrigatorios,
+		   	List<Componente> componentes,
+		   	List<Pacote> pacotes,
+		   	double money
+	) throws IloException {
+		ConfiguracaoOtima configuracaoOtima = new ConfiguracaoOtima();
+		return configuracaoOtima.configuracaoOtima(componentesObrigatorios, componentes, pacotes, money);
+	}
+
+	//Para criar Configuração a partir da configuração otima mais rapidamente
+	public Configuracao(List<Pacote> pacotesAceitados, List<Componente> componentesAceitados) {
+		this();
+		for (Pacote p:pacotesAceitados) {
+			desconto += p.getDesconto();
+			pacotes.put(p.getId(),p);
+		}
+		for (Componente c:componentesAceitados) {
+			preco += c.getPreco();
+			componentes.put(c.getId(),c);
+		}
+	}
+
+	public Map<Integer, Componente> consultarComponentes() {
+		return configuracaoDAO.getComponentes(id);
 	}
 
 	/**
@@ -79,8 +105,7 @@ public class Configuracao {
 	 * @param componenteId
 	 */
 	public Componente adiconarComponente(int componenteId) {
-		// TODO - implement Configuracao.adiconarComponente
-		throw new UnsupportedOperationException();
+		return configuracaoDAO.addComponente(id, componenteId);
 	}
 
 	/**
@@ -88,8 +113,11 @@ public class Configuracao {
 	 * @param componenteId
 	 */
 	public void removerComponente(int componenteId) {
-		// TODO - implement Configuracao.removerComponente
-		throw new UnsupportedOperationException();
+		configuracaoDAO.removeComponente(id, componenteId);
+	}
+
+	public Map<Integer, Pacote> consultarPacotes() {
+		return configuracaoDAO.getPacotes(id);
 	}
 
 	/**
@@ -97,23 +125,9 @@ public class Configuracao {
 	 * @param pacoteId
 	 */
 	public void adicionarPacote(int pacoteId) {
-		// TODO - implement Configuracao.adicionarPacote
-		throw new UnsupportedOperationException();
+		configuracaoDAO.addPacote(id, pacoteId);
 	}
 
-	public List<Pacote> consultarPacotes() {
-		// TODO - implement Configuracao.consultarPacotes
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 *
-	 * @param tipoComponente
-	 */
-	public List<Componente> consultarComponentes(TipoComponente tipoComponente) {
-		// TODO - implement Configuracao.consultarComponentes
-		throw new UnsupportedOperationException();
-	}
 
 	/**
 	 *

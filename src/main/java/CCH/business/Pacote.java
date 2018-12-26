@@ -2,6 +2,8 @@ package CCH.business;
 
 import CCH.dataaccess.ComponenteDAO;
 
+import java.util.List;
+
 public class Pacote {
 
 	private ComponenteDAO componentes;
@@ -65,4 +67,7 @@ public class Pacote {
 		return "Pacote " + id;
 	}
 
+    public List<Integer> idsComponentes() {
+    	return null;
+	}
 }

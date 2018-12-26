@@ -1,5 +1,6 @@
 package CCH.dataaccess;
 
+import CCH.business.Componente;
 import CCH.business.Pacote;
 
 import java.sql.Connection;
@@ -109,6 +110,25 @@ public class PacoteDAO implements Map<Integer, Pacote> {
         collection.forEach(u -> hashmap.put(u.getId(), u));
 
         return hashmap;
+    }
+
+    public Map<Integer, Componente> getComponentes(Integer pacoteId) {
+        try {
+            Map<Integer, Componente> componentes = new HashMap<>();
+            Statement stm = conn.createStatement();
+            String sql = "SELECT * FROM Pacote_has_Componente WHERE Pacote_id=" + pacoteId;
+            ResultSet rs = stm.executeQuery(sql);
+
+            while (rs.next()) {
+                Componente componente = componenteDAO.get(rs.getInt(2));
+                componentes.put(componente.getId(), componente);
+            }
+
+            return componentes;
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
     }
 
     public int hashCode() {
