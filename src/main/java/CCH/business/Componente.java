@@ -97,4 +97,14 @@ public class Componente {
 	public String getStockString() {
 		return Integer.toString(stock);
 	}
+
+	public String getStockAvailable() {
+		if (stock > 20) {
+			return "Disponível";
+		} else if (stock > 0) {
+			return "Limitado";
+		}
+
+		return "Indisponível";
+	}
 }

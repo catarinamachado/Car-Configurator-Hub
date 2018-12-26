@@ -23,6 +23,6 @@
          </font></Label>
       <TextField fx:id="usernameField" layoutX="255.0" layoutY="69.0" prefHeight="37.0" prefWidth="257.0" />
       <PasswordField fx:id="passwordField" layoutX="255.0" layoutY="163.0" prefHeight="37.0" prefWidth="257.0" />
-      <Button fx:id="back" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
+      <Button fx:id="back" layoutY="1.0" mnemonicParsing="false" onMouseReleased="#back" prefHeight="6.0" prefWidth="42.0" style="-fx-background-color: #f3f3f3;" text="&lt;-" />
     </children>
 </Pane>

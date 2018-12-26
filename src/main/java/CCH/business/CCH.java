@@ -117,4 +117,8 @@ public class CCH {
 	public List<Pacote> consultarPacotes() {
 		return new ArrayList<>(pacoteDAO.values());
 	}
+
+	public List<Componente> consultarComponentes() {
+		return new ArrayList<>(componenteDAO.values());
+	}
 }

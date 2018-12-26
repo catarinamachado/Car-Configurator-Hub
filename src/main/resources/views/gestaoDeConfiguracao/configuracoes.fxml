@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.gestaoDeConfiguracao.ConfiguracoesController">
+    <children>
+        <TableView fx:id="table" layoutX="60.0" layoutY="32.0" prefHeight="318.0" prefWidth="480">
+            <columns>
+                <TableColumn prefWidth="276.0" style="-fx-alignment: center;" text="Configuração" />
+                <TableColumn prefWidth="129.0" style="-fx-alignment: center;" text="Preço (€)" />
+                <TableColumn prefWidth="70.0" style="-fx-alignment: center;" />
+            </columns>
+        </TableView>
+      <Button fx:id="back" layoutY="1.0" mnemonicParsing="false" onMouseReleased="#back" prefHeight="6.0" prefWidth="42.0" style="-fx-background-color: #f3f3f3;" text="&lt;-" />
+      <Button onMouseReleased="#add" layoutX="60.0" layoutY="359.0" mnemonicParsing="false" text="Adicionar" />
+    </children>
+</Pane>

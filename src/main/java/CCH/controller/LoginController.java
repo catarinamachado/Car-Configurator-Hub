@@ -48,7 +48,7 @@ public class LoginController {
                 } else if (tipoUtilizador == TipoUtilizador.FABRICA) {
                     redirectTo("/views/operacaoFabril/index.fxml");
                 } else {
-                    redirectTo("/views/gestaoDeConfiguracao/index.fxml");
+                    redirectTo("/views/gestaoDeConfiguracao/configuracoes.fxml");
                 }
 
             } else {

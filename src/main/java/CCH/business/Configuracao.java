@@ -50,11 +50,6 @@ public class Configuracao {
 		this.pacotes = pacotes;
 	}
 
-	public Configuracao() {
-		// TODO - implement Configuracao.Configuracao
-		throw new UnsupportedOperationException();
-	}
-
 	public Configuracao(int id, double preco, double desconto) {
 		this.id = id;
 		this.preco = preco;
@@ -120,4 +115,7 @@ public class Configuracao {
 		throw new UnsupportedOperationException();
 	}
 
+	public String getNome() {
+		return "Configuração " + id;
+	}
 }

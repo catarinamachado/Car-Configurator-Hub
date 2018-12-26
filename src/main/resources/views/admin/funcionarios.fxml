@@ -16,6 +16,6 @@
                 <TableColumn prefWidth="47.0" style="-fx-alignment: center;" />
             </columns>
         </TableView>
-        <Button fx:id="back" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
+        <Button fx:id="back" style="-fx-background-color: #f3f3f3;" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
     </children>
 </Pane>

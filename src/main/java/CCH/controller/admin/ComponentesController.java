@@ -8,10 +8,10 @@ public class ComponentesController {
     @FXML
     public Button back;
 
-    private Pacote pacote;
+    private static Pacote pacote;
 
-    public void setPacote(Pacote pacote) {
-        this.pacote = pacote;
+    public static void setPacote(Pacote newPacote) {
+        pacote = newPacote;
     }
 
     @FXML

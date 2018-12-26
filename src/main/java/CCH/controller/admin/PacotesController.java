@@ -129,9 +129,8 @@ public class PacotesController {
     private void loadComponentes(Pacote pacote) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/admin/componentes.fxml"));
+            ComponentesController.setPacote(pacote);
             Parent root = fxmlLoader.load();
-            ComponentesController controller = fxmlLoader.getController();
-            controller.setPacote(pacote);
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();

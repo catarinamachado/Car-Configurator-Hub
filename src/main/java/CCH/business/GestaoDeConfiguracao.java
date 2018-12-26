@@ -2,6 +2,10 @@ package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class GestaoDeConfiguracao {
 
 	private ConfiguracaoDAO configuracoes;
@@ -19,8 +23,9 @@ public class GestaoDeConfiguracao {
 	}
 
 	public Configuracao criarConfiguracao() {
-		// TODO - implement GestaoDeConfiguracao.criarConfiguracao
-		throw new UnsupportedOperationException();
+		Configuracao configuracao = new Configuracao(configuracoes.getNextId(), 0, 0);
+		configuracao = configuracoes.put(configuracao.getId(), configuracao);
+		return configuracao;
 	}
 
 	/**
@@ -28,8 +33,18 @@ public class GestaoDeConfiguracao {
 	 * @param configuracaoId
 	 */
 	public void removerConfiguracao(int configuracaoId) {
-		// TODO - implement GestaoDeConfiguracao.removerConfiguracao
-		throw new UnsupportedOperationException();
+		configuracoes.remove(configuracaoId);
 	}
 
+	public List<Configuracao> consultarConfiguracoes() {
+		return new ArrayList<>(configuracoes.values());
+	}
+
+	public Collection<Componente> getComponentes(int configuracaoId) {
+		return configuracoes.getComponentes(configuracaoId).values();
+	}
+
+	public void removerComponente(int configuracaoId, int componenteId) {
+		configuracoes.removeComponente(configuracaoId, componenteId);
+	}
 }

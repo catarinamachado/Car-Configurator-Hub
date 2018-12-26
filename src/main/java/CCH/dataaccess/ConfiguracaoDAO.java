@@ -20,6 +20,21 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         conn = CCHConnection.getConnection();
     }
 
+    public int getNextId() {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "SELECT id FROM Configuracao ORDER BY id DESC LIMIT 1;";
+            ResultSet rs = stm.executeQuery(sql);
+
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+
+            return 0;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
     public boolean containsKey(Object key) throws NullPointerException {
         try {
             Statement stm = conn.createStatement();
@@ -117,12 +132,12 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
 
     public Map<Integer, Pacote> getPacotes(Integer configuracaoId) {
         try {
-            Map<Integer, Pacote> pacotes = null;
+            Map<Integer, Pacote> pacotes = new HashMap<>();
             Statement stm = conn.createStatement();
             String sql = "SELECT * FROM Configuracao_has_Pacote WHERE Configuracao_id=" + configuracaoId;
             ResultSet rs = stm.executeQuery(sql);
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Pacote pacote = pacoteDAO.get(rs.getInt(2));
                 pacotes.put(pacote.getId(), pacote);
             }
@@ -136,17 +151,33 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
 
     public Map<Integer, Componente> getComponentes(Integer configuracaoId) {
         try {
-            Map<Integer, Componente> componentes = null;
+            Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
-            String sql = "SELECT * FROM Configuracao_has_Componente WHERE Pacote_id=" + configuracaoId;
+            String sql = "SELECT * FROM Configuracao_has_Componente WHERE Configuracao_id=" + configuracaoId;
             ResultSet rs = stm.executeQuery(sql);
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Componente componente = componenteDAO.get(rs.getInt(2));
                 componentes.put(componente.getId(), componente);
             }
 
             return componentes;
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void removeComponente(Integer configuracaoId, Integer componenteId) {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "DELETE FROM Configuracao_has_Componente WHERE Configuracao_id=" +
+                    configuracaoId +
+                    " AND Componente_id=" +
+                    componenteId +
+                    ";";
+
+            int i = stm.executeUpdate(sql);
         }
         catch (Exception e) {
             throw new NullPointerException(e.getMessage());
