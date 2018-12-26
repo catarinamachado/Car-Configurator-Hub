@@ -3,15 +3,15 @@ package CCH.business;
 import CCH.dataaccess.ComponenteDAO;
 import CCH.dataaccess.PacoteDAO;
 import CCH.dataaccess.UtilizadorDAO;
-import CCH.exception.ComponenteIncompativelNoPacoteException;
-import CCH.exception.ComponenteJaExisteNoPacoteException;
-import CCH.exception.WrongCredentialsException;
+import CCH.exception.NoOptimalConfigurationException;
 import CCH.exception.ComponenteIncompativelNoPacoteException;
 import CCH.exception.ComponenteJaExisteNoPacoteException;
 import CCH.exception.WrongCredentialsException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CCH {
 	private GestaoDeConfiguracao gestaoDeConfiguracao;
@@ -125,6 +125,14 @@ public class CCH {
 		return new ArrayList<>(componenteDAO.values());
 	}
 
+
+	public Configuracao ConfiguracaoOtima(double valor) throws NoOptimalConfigurationException {
+		Collection<Pacote> pacs = pacoteDAO.values();
+		Collection<Componente> comps = componenteDAO.values();
+		return gestaoDeConfiguracao.configuracaoOtima(pacs,comps,valor);
+	}
+	
+
 	public List<Componente> consultarComponentesNoPacote(int pacote_id) {
 		return new ArrayList<>(pacoteDAO.getAllComponentesNoPacote(pacote_id));
 	}
@@ -136,5 +144,5 @@ public class CCH {
 	public void adicionarComponenteAoPacote(Pacote pacote, int componente_id) throws ComponenteJaExisteNoPacoteException, ComponenteIncompativelNoPacoteException {
 		pacote.adicionaComponente(componente_id);
 	}
-
 }
+

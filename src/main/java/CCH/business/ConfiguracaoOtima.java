@@ -3,15 +3,12 @@ package CCH.business;
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class ConfiguracaoOtima {
 
-    private void restricaoComponentes(IloCplex cplex, List<Componente> componentesObrigatorios, List<Componente> componentes, HashMap<Integer, IloIntVar> comps) throws IloException {
+    private void restricaoComponentes(IloCplex cplex, Collection<Componente> componentesObrigatorios, Collection<Componente> componentes, HashMap<Integer, IloIntVar> comps) throws IloException {
         for (Componente c : componentes) {
             IloIntVar value = comps.get(c.getId());
             Set<Integer> incomp = c.getIncompativeis().keySet();
@@ -48,7 +45,7 @@ public class ConfiguracaoOtima {
         }
     }
 
-    private void restricaoPacotes(IloCplex cplex, List<Pacote> pacotes, List<Componente> componentes, HashMap<Integer, IloIntVar> comps, HashMap<Integer, IloIntVar> pacs) throws IloException{
+    private void restricaoPacotes(IloCplex cplex, Collection<Pacote> pacotes, Collection<Componente> componentes, HashMap<Integer, IloIntVar> comps, HashMap<Integer, IloIntVar> pacs) throws IloException{
         HashMap<Integer,IloNumExpr> overlap= new HashMap<>();
 
         for (Pacote p : pacotes) {
@@ -78,9 +75,9 @@ public class ConfiguracaoOtima {
 
 
     public Configuracao configuracaoOtima(
-            List<Componente> componentesObrigatorios,
-            List<Componente> componentes,
-            List<Pacote> pacotes,
+            Collection<Componente> componentesObrigatorios,
+            Collection<Componente> componentes,
+            Collection<Pacote> pacotes,
             double money
     ) throws IloException {
 
