@@ -15,6 +15,7 @@
                 <TableColumn prefWidth="97.0" style="-fx-alignment: center;"/>
             </columns>
         </TableView>
+        <Button onMouseReleased="#add" layoutX="60.0" layoutY="311.0" mnemonicParsing="false" text="Adicionar Pacote" />
         <Button onMouseReleased="#loadFuncionarios" layoutX="60.0" layoutY="345.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="480.0" text="Gerir Funcionários" />
         <Button fx:id="back" style="-fx-background-color: #f3f3f3;" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
     </children>

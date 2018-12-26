@@ -1,16 +1,19 @@
 package CCH.controller.admin;
 
 import CCH.CarConfiguratorHubApplication;
-import CCH.business.*;
+import CCH.business.CCH;
+import CCH.business.Pacote;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -28,6 +31,9 @@ public class PacotesController {
 
     @FXML
     public void initialize() {
+        table.setEditable(true);
+        table.getSelectionModel().cellSelectionEnabledProperty().set(true);
+
         ObservableList<TableColumn> observableList = table.getColumns();
 
         observableList.get(0).setCellValueFactory(
@@ -36,12 +42,21 @@ public class PacotesController {
 
         addComponenteButtonToTableColumn(observableList.get(1));
 
-        observableList.get(2).setCellValueFactory(
-                new PropertyValueFactory<Pacote, Integer>("desconto")
+        TableColumn<Pacote, String> descontoColumn = observableList.get(2);
+        descontoColumn.setCellValueFactory(
+                new PropertyValueFactory<>("descontoString")
+        );
+        descontoColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descontoColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Pacote, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Pacote, String> t) {
+                        updateDesconto(t);
+                    }
+                }
         );
 
         addDeleteButtonToTableColumn(observableList.get(3));
-
 
         table.setItems(getPacotes());
     }
@@ -149,6 +164,22 @@ public class PacotesController {
         stage.setScene(new Scene(loader.load()));
 
         stage.showAndWait();
+    }
+
+    @FXML
+    public void updateDesconto(TableColumn.CellEditEvent<Pacote, String> event) {
+        Pacote pacote = event.getTableView().getItems().get(event.getTablePosition().getRow());
+        pacote.setDesconto(Integer.parseInt(event.getNewValue()));
+        pacote.atualizarDesconto(pacote);
+
+        table.refresh();
+    }
+
+    @FXML
+    public void add() {
+        cch.criarPacote();
+        table.setItems(getPacotes());
+        table.refresh();
     }
 
     @FXML

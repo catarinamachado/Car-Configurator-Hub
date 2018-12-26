@@ -117,4 +117,5 @@ public class Componente {
 	public List<Integer> getIdIncompativeis() {
 		return incompativeis.stream().collect(Collectors.toList());
 	}
+
 }

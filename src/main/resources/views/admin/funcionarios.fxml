@@ -17,6 +17,6 @@
             </columns>
         </TableView>
         <Button fx:id="back" style="-fx-background-color: #f3f3f3;" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />
-        <Button onMouseReleased="#add" layoutX="41.0" layoutY="349.0" mnemonicParsing="false" text="Adicionar" />
+        <Button onMouseReleased="#add" layoutX="41.0" layoutY="349.0" mnemonicParsing="false" text="Adicionar User" />
     </children>
 </Pane>

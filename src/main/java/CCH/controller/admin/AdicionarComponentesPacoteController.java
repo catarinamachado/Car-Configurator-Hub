@@ -1,28 +1,23 @@
 package CCH.controller.admin;
 
+import CCH.CarConfiguratorHubApplication;
 import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Pacote;
+import CCH.exception.ComponenteIncompativelNoPacoteException;
+import CCH.exception.ComponenteJaExisteNoPacoteException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import CCH.CarConfiguratorHubApplication;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-import java.io.IOException;
 import java.util.Optional;
 
-public class ComponentesController {
+public class AdicionarComponentesPacoteController {
     @FXML
     public TableView table;
 
@@ -53,38 +48,50 @@ public class ComponentesController {
                 new PropertyValueFactory<Componente, Double>("preco")
         );
 
-        addDeleteButtonToTableColumn(observableList.get(3));
+        addNewComponenteToPacoteButtonToTableColumn(observableList.get(3));
 
         table.setItems(getComponentes());
     }
 
     private ObservableList<Componente> getComponentes() {
         ObservableList<Componente> componentes = FXCollections.observableArrayList();
-        componentes.addAll(cch.consultarComponentesNoPacote(pacote.getId()));
+        componentes.addAll(cch.consultarComponentes());
 
         return componentes;
     }
 
-    private void addDeleteButtonToTableColumn(TableColumn t) {
+    private void addNewComponenteToPacoteButtonToTableColumn(TableColumn t) {
         Callback<TableColumn<Componente, Void>, TableCell<Componente, Void>> cellFactory = new Callback<TableColumn<Componente, Void>, TableCell<Componente, Void>>() {
             @Override
             public TableCell<Componente, Void> call(final TableColumn<Componente, Void> param) {
                 final TableCell<Componente, Void> cell = new TableCell<Componente, Void>() {
 
-                    private final Button btn = new Button("Apagar");
+                    private final Button btn = new Button("Adicionar ao Pacote");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Componente componente = getTableView().getItems().get(getIndex());
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setTitle("Aviso");
-                            alert.setContentText("Pretende continuar?");
-
+                            alert.setTitle("Confirmação");
+                            alert.setContentText("Pretende adicionar o componente ao pacote?");
                             Optional<ButtonType> result = alert.showAndWait();
-                            if (result.get() == ButtonType.OK){
-                                cch.removerComponenteDoPacote(pacote, componente.getId());
-                                table.setItems(getComponentes());
-                                table.refresh();
+
+                            if (result.get() == ButtonType.OK) {
+                                try {
+                                    cch.adicionarComponenteAoPacote(pacote, componente.getId());
+                                    table.refresh();
+                                } catch (ComponenteJaExisteNoPacoteException e) {
+                                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                                    alert2.setTitle("Erro");
+                                    alert2.setContentText("O componente já existe no pacote.");
+                                    Optional<ButtonType> result2 = alert2.showAndWait();
+                                } catch (ComponenteIncompativelNoPacoteException e) {
+                                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                                    alert2.setTitle("Erro");
+                                    alert2.setHeaderText("Impossível Adicionar Componente");
+                                    alert2.setContentText("É incompatível com o Componente " + e.getMessage() + ".");
+                                    Optional<ButtonType> result2 = alert2.showAndWait();
+                                }
                             }
                         });
                     }
@@ -107,25 +114,8 @@ public class ComponentesController {
     }
 
     @FXML
-    private void loadComponentes() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/admin/adicionarComponentesPacote.fxml"));
-            AdicionarComponentesPacoteController.setPacote(pacote);
-            Parent root = fxmlLoader.load();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.initOwner(back.getScene().getWindow());
-            stage.setScene(scene);
-
-            stage.showAndWait();
-
-            back();
-        } catch (IOException e) { }
-    }
-
-    @FXML
     public void back() {
         back.getScene().getWindow().hide();
     }
+
 }

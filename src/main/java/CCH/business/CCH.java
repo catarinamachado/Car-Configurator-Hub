@@ -3,6 +3,11 @@ package CCH.business;
 import CCH.dataaccess.ComponenteDAO;
 import CCH.dataaccess.PacoteDAO;
 import CCH.dataaccess.UtilizadorDAO;
+import CCH.exception.ComponenteIncompativelNoPacoteException;
+import CCH.exception.ComponenteJaExisteNoPacoteException;
+import CCH.exception.WrongCredentialsException;
+import CCH.exception.ComponenteIncompativelNoPacoteException;
+import CCH.exception.ComponenteJaExisteNoPacoteException;
 import CCH.exception.WrongCredentialsException;
 
 import java.util.ArrayList;
@@ -79,13 +84,10 @@ public class CCH {
 		return utilizador;
 	}
 
-	/**
-	 *
-	 * @param pacote
-	 */
-	public void criarPacote(Pacote pacote) {
-		// TODO - implement CCH.criarPacote
-		throw new UnsupportedOperationException();
+	public Pacote criarPacote() {
+		Pacote pacote = new Pacote();
+		pacote = pacoteDAO.put(pacote.getId(), pacote);
+		return pacote;
 	}
 
 	/**
@@ -93,10 +95,10 @@ public class CCH {
 	 * @param pacoteId
 	 */
 	public void removerPacote(int pacoteId) {
+		pacoteDAO.removeAllComponentes(pacoteId);
 		pacoteDAO.remove(pacoteId);
 	}
-
-
+	
 	public Utilizador criarUtilizador() {
 		Utilizador utilizador = new Utilizador("empty", "empty");
 		utilizador = utilizadorDAO.put(utilizador.getId(), utilizador);
@@ -122,4 +124,17 @@ public class CCH {
 	public List<Componente> consultarComponentes() {
 		return new ArrayList<>(componenteDAO.values());
 	}
+
+	public List<Componente> consultarComponentesNoPacote(int pacote_id) {
+		return new ArrayList<>(pacoteDAO.getAllComponentesNoPacote(pacote_id));
+	}
+
+	public void removerComponenteDoPacote(Pacote pacote, int componente_id) {
+		pacote.removeComponente(componente_id);
+	}
+
+	public void adicionarComponenteAoPacote(Pacote pacote, int componente_id) throws ComponenteJaExisteNoPacoteException, ComponenteIncompativelNoPacoteException {
+		pacote.adicionaComponente(componente_id);
+	}
+
 }

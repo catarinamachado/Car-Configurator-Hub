@@ -3,9 +3,12 @@ package CCH.business;
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
-import ilog.concert.IloException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import ilog.concert.IloException;
 
 public class Configuracao {
 
@@ -16,8 +19,6 @@ public class Configuracao {
 	private Map<Integer, Pacote> pacotes;
 
 	private ConfiguracaoDAO configuracaoDAO = new ConfiguracaoDAO();
-
-
 
 	public int getId() {
 		return this.id;

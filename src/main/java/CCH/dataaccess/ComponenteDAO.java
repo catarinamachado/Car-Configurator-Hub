@@ -100,7 +100,13 @@ public class ComponenteDAO implements Map<Integer, Componente> {
             ResultSet rs = stm.executeQuery(sql);
 
             if (rs.next()) {
-                Componente componente = get(rs.getInt(2));
+                Componente componente;
+
+                if (rs.getInt(1) == componenteId)
+                    componente = get(rs.getInt(2));
+                else
+                    componente = get(rs.getInt(1));
+
                 componentes.put(componente.getId(), componente);
             }
 
