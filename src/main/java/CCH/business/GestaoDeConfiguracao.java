@@ -1,17 +1,20 @@
 package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
+import CCH.dataaccess.EncomendaDAO;
+import CCH.exception.EncomendaRequerOutrosComponentes;
+import CCH.exception.EncomendaTemComponentesIncompativeis;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class GestaoDeConfiguracao {
 
 	private ConfiguracaoDAO configuracoes;
+	private EncomendaDAO encomendas;
 
 	public GestaoDeConfiguracao() {
 		this.configuracoes = new ConfiguracaoDAO();
+		this.encomendas = new EncomendaDAO();
 	}
 
 	public ConfiguracaoDAO getConfiguracoes() {
@@ -46,5 +49,20 @@ public class GestaoDeConfiguracao {
 
 	public void removerComponente(int configuracaoId, int componenteId) {
 		configuracoes.removeComponente(configuracaoId, componenteId);
+	}
+
+	public void criarEncomenda(
+				Configuracao configuracao,
+				String nomeCliente,
+				String numeroDeIdentificacaoCliente,
+				String moradaCliente,
+				String paisCliente,
+				String emailCliente
+	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis {
+		Map<Integer, Componente> componentes = configuracao.verificaValidade();
+
+		int id = encomendas.getNextId();
+		Encomenda encomenda = new Encomenda(componentes, id, configuracao.getPreco(), nomeCliente, numeroDeIdentificacaoCliente, moradaCliente, paisCliente, emailCliente);
+		encomendas.put(id, encomenda);
 	}
 }

@@ -3,7 +3,7 @@ package CCH.business;
 import CCH.dataaccess.ComponenteDAO;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 public class Componente {
 
@@ -73,16 +73,16 @@ public class Componente {
 		this.classeComponente = classeComponente;
 	}
 
-	public Collection<Integer> getRequeridos() {
-		return requeridos;
+	public Map<Integer, Componente> getRequeridos() {
+		return componenteDAO.getComponentesRequeridos(id);
 	}
 
 	public void setRequeridos(Collection<Integer> requeridos) {
 		this.requeridos = requeridos;
 	}
 
-	public Collection<Integer> getIncompativeis() {
-		return incompativeis;
+	public Map<Integer, Componente> getIncompativeis() {
+		return componenteDAO.getComponentesIncompativeis(id);
 	}
 
 	public void setIncompativeis(Collection<Integer> incompativeis) {

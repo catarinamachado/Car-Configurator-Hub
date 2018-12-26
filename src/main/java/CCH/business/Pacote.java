@@ -1,10 +1,6 @@
 package CCH.business;
 
 import CCH.dataaccess.ComponenteDAO;
-import CCH.dataaccess.PacoteDAO;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Pacote {
 

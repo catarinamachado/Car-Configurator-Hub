@@ -4,7 +4,6 @@ import CCH.CarConfiguratorHubApplication;
 import CCH.business.CCH;
 import CCH.business.TipoUtilizador;
 import CCH.business.Utilizador;
-import CCH.exception.WrongCredentialsException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,22 +37,18 @@ public class LoginController {
             int id = Integer.parseInt(usernameField.getText());
             String password = passwordField.getText();
 
-            Utilizador u = cch.getUtilizadorDAO().get(id);
+            Utilizador u = cch.iniciarSessao(id, password);
 
-            if (u.validarCredenciais(id, password)) {
-                TipoUtilizador tipoUtilizador = u.getTipoUtilizador();
+            TipoUtilizador tipoUtilizador = u.getTipoUtilizador();
 
-                if (tipoUtilizador == TipoUtilizador.ADMIN) {
-                    redirectTo("/views/admin/pacotes.fxml");
-                } else if (tipoUtilizador == TipoUtilizador.FABRICA) {
-                    redirectTo("/views/operacaoFabril/index.fxml");
-                } else {
-                    redirectTo("/views/gestaoDeConfiguracao/configuracoes.fxml");
-                }
-
+            if (tipoUtilizador == TipoUtilizador.ADMIN) {
+                redirectTo("/views/admin/pacotes.fxml");
+            } else if (tipoUtilizador == TipoUtilizador.FABRICA) {
+                redirectTo("/views/operacaoFabril/index.fxml");
             } else {
-                throw new WrongCredentialsException();
+                redirectTo("/views/gestaoDeConfiguracao/configuracoes.fxml");
             }
+
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {

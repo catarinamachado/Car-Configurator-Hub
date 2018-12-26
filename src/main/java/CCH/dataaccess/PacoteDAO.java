@@ -1,6 +1,5 @@
 package CCH.dataaccess;
 
-import CCH.business.Componente;
 import CCH.business.Pacote;
 
 import java.sql.Connection;

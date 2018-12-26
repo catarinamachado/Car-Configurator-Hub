@@ -1,7 +1,6 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
-import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Configuracao;
 import CCH.business.GestaoDeConfiguracao;
@@ -9,10 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class ConfiguracaoController {
@@ -101,26 +104,36 @@ public class ConfiguracaoController {
     }
 
     @FXML
-    public void loadComponentes() {
-
+    public void loadComponentes() throws IOException {
+        //redirectTo("/views/gestaoDeConfiguracao/componentes.fxml");
     }
 
     @FXML
-    public void loadPacotes() {
-
+    public void loadPacotes() throws IOException {
+        //redirectTo("/views/gestaoDeConfiguracao/pacotes.fxml");
     }
 
     @FXML
-    public void configOtima() {
-
+    public void configOtima() throws IOException {
+        //redirectTo("/views/gestaoDeConfiguracao/configotima.fxml");
     }
 
     @FXML
-    public void criarEncomenda() {
-
+    public void criarEncomenda() throws IOException {
+        EncomendaController.setConfiguracao(configuracao);
+        redirectTo("/views/gestaoDeConfiguracao/encomenda.fxml");
     }
 
+    private void redirectTo(String fxml) throws IOException {
+        Stage stage = new Stage();
+        stage.initOwner(back.getScene().getWindow());
 
+        stage.setScene(
+                new Scene(
+                        new FXMLLoader(getClass().getResource(fxml)).load()));
+
+        stage.showAndWait();
+    }
 
     @FXML
     public void back() {

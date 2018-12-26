@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.gestaoDeConfiguracao.EncomendaController">
+    <children>
+        <Button fx:id="criar" layoutX="69.0" layoutY="329.0" mnemonicParsing="false" onMouseReleased="#criarEncomenda" prefHeight="40.0" prefWidth="463.0" text="Criar Encomenda">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Button>
+        <Button fx:id="back" layoutY="1.0" mnemonicParsing="false" onMouseReleased="#back" prefHeight="6.0" prefWidth="42.0" style="-fx-background-color: #f3f3f3;" text="&lt;-" />
+        <Label layoutX="69.0" layoutY="50.0" text="Nome:">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+      <Label layoutX="69.0" layoutY="100.0" text="Nº de Identificação:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="69.0" layoutY="150.0" text="Morada:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="69.0" layoutY="200.0" text="País:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="69.0" layoutY="250.0" text="Email:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nome" layoutX="271.0" layoutY="50.0" prefHeight="27.0" prefWidth="261.0" />
+      <TextField fx:id="id" layoutX="271.0" layoutY="100.0" prefHeight="27.0" prefWidth="261.0" />
+      <TextField fx:id="morada" layoutX="271.0" layoutY="150.0" prefHeight="27.0" prefWidth="261.0" />
+      <TextField fx:id="pais" layoutX="271.0" layoutY="200.0" prefHeight="27.0" prefWidth="261.0" />
+      <TextField fx:id="email" layoutX="271.0" layoutY="250.0" prefHeight="27.0" prefWidth="261.0" />
+    </children>
+</Pane>

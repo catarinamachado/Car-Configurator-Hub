@@ -3,7 +3,6 @@ package CCH.controller.gestaoDeConfiguracao;
 import CCH.CarConfiguratorHubApplication;
 import CCH.business.Configuracao;
 import CCH.business.GestaoDeConfiguracao;
-import CCH.controller.admin.ComponentesController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class ConfiguracoesController {

@@ -16,6 +16,21 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
         conn = CCHConnection.getConnection();
     }
 
+    public int getNextId() {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "SELECT id FROM Encomenda ORDER BY id DESC LIMIT 1;";
+            ResultSet rs = stm.executeQuery(sql);
+
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+
+            return 0;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
     public boolean containsKey(Object key) throws NullPointerException {
         try {
             Statement stm = conn.createStatement();

@@ -2,7 +2,6 @@ package CCH.dataaccess;
 
 import CCH.business.ClasseComponente;
 import CCH.business.Componente;
-import ch.qos.logback.core.encoder.EchoEncoder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -91,9 +90,13 @@ public class ComponenteDAO implements Map<Integer, Componente> {
 
     public Map<Integer, Componente> getComponentesIncompativeis(Integer componenteId) {
         try {
-            Map<Integer, Componente> componentes = null;
+            Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
-            String sql = "SELECT * FROM Componente_incompativel_Componente WHERE Componente_id=" + componenteId;
+
+            String sql = "SELECT * FROM Componente_incompativel_Componente WHERE " +
+                    "Componente_id=" + componenteId + " OR " +
+                    "Componente_id1=" + componenteId + ";";
+
             ResultSet rs = stm.executeQuery(sql);
 
             if (rs.next()) {
@@ -110,7 +113,7 @@ public class ComponenteDAO implements Map<Integer, Componente> {
 
     public Map<Integer, Componente> getComponentesRequeridos(Integer componenteId) {
         try {
-            Map<Integer, Componente> componentes = null;
+            Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
             String sql = "SELECT * FROM Componente_requer_Componente WHERE Componente_id=" + componenteId;
             ResultSet rs = stm.executeQuery(sql);
