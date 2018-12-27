@@ -299,4 +299,65 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         throw new NullPointerException("Not implemented!");
     }
 
+    public void updateDesconto(Object key, double descontoAtualizado) {
+        try {
+            Statement stm = conn.createStatement();
+
+            String sql = "UPDATE Configuracao SET desconto = " +
+                    descontoAtualizado +
+                    " WHERE id = " +
+                    key +
+                    ";";
+
+            stm.executeUpdate(sql);
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
+    public void removePacoteNasConfiguracoes(Object key) {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "DELETE FROM Configuracao_has_Pacote WHERE Pacote_id = " + key + ";";
+            stm.executeUpdate(sql);
+        } catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public double getDescontoConfiguracao(Object key) {
+        try {
+            double al = 0.0;
+            Statement stm = conn.createStatement();
+            String sql = "SELECT desconto FROM Configuracao WHERE id=" + key;
+            ResultSet rs = stm.executeQuery(sql);
+
+            if (rs.next()) {
+                al = rs.getInt(1);
+            }
+
+            return al;
+        }
+        catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public List<Integer> getAllIdsConfiguracoesComOPacote(Object pacoteId) {
+        try {
+            List<Integer> idsConfiguracoes = new ArrayList<>();;
+
+            Statement stm = conn.createStatement();
+            String sql = "SELECT Configuracao_id FROM Configuracao_has_Pacote WHERE Pacote_id = " + pacoteId + ";";
+            ResultSet rs = stm.executeQuery(sql);
+
+            while (rs.next()) {
+                idsConfiguracoes.add(rs.getInt(1));
+            }
+
+            return idsConfiguracoes;
+        } catch (Exception e) {
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+    
 }

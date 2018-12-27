@@ -94,6 +94,8 @@ public class CCH {
 	 * @param pacoteId
 	 */
 	public void removerPacote(int pacoteId) {
+		gestaoDeConfiguracao.removePacote(pacoteId, pacoteDAO.getDescontoPacote(pacoteId));
+
 		pacoteDAO.removeAllComponentes(pacoteId);
 		pacoteDAO.remove(pacoteId);
 	}
