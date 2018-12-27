@@ -64,6 +64,7 @@ public class ConfiguracaoOtima {
 
                     IloNumExpr exp = overlap.get(k);
                     exp = cplex.sum(exp,pvalue);
+                    overlap.put(k,exp);
                 } else {
                     cplex.addEq(0,pvalue);//se o componente não estiver em comps o modelo não o seleciona, Para prevenir Erros.
                 }
@@ -85,31 +86,32 @@ public class ConfiguracaoOtima {
         HashMap<Integer,IloIntVar> comps = new HashMap<>();
         HashMap<Integer,IloIntVar> pacs = new HashMap<>();
 
-        IloNumExpr objfunc = cplex.constant(0);
+        IloNumExpr compsPreco = cplex.constant(0);
+        IloNumExpr pacsDesconto = cplex.constant(0);
 
         //Variaveis de decisão
         for (Componente c:componentes) {
             int ckey = c.getId();
             IloIntVar cvalue = cplex.boolVar("c"+ckey);
             comps.put(ckey,cvalue);
-            objfunc = cplex.sum(objfunc,cplex.prod(cvalue,c.getPreco())); //função objetivo
+            compsPreco = cplex.sum(compsPreco,cplex.prod(cvalue,c.getPreco()));
         }
         for (Pacote p:pacotes) {
             int pkey = p.getId();
             IloIntVar pvalue = cplex.boolVar("p"+pkey);
-            comps.put(pkey,pvalue);
-            objfunc = cplex.sum(objfunc,cplex.prod(pvalue,-1*p.getDesconto()));//função objetivo
+            pacs.put(pkey,pvalue);
+            pacsDesconto = cplex.sum(pacsDesconto,cplex.prod(pvalue, p.getDesconto()));
         }
 
         //Função Objetivo
-        cplex.addMaximize(objfunc);
+        cplex.addMaximize(compsPreco);
 
         //restrições de pacotes e componentes
         restricaoComponentes(cplex,componentesObrigatorios,componentes,comps);
         restricaoPacotes(cplex,pacotes,componentes,comps,pacs);
 
         //restrição de preço
-        cplex.addLe(money,objfunc);
+        cplex.addLe(cplex.sum(compsPreco,cplex.prod(-1,pacsDesconto)),money);
 
         //resolve o problema
         if(cplex.solve()) {
