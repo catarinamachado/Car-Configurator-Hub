@@ -2,9 +2,16 @@ package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.PacoteDAO;
+
 import CCH.exception.ComponenteJaAdicionadoException;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import CCH.exception.PacoteJaAdicionadoException;
+import ilog.concert.IloException;
 
 import java.util.*;
 
@@ -69,6 +76,8 @@ public class Configuracao {
 	//Para criar Configuração a partir da configuração otima mais rapidamente
 	public Configuracao(List<Pacote> pacotesAceitados, List<Componente> componentesAceitados) {
 		this();
+		configuracaoDAO.put(this.id, this);
+
 		try {
 			for (Pacote p : pacotesAceitados) {
 				adicionarPacote(p.getId(), null);

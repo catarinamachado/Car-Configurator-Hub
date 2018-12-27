@@ -129,6 +129,7 @@ public class ConfiguracaoOtima {
                     componentesAceitados.add(c);
             }
             Configuracao otima = new Configuracao(pacotesAceitados,componentesAceitados);
+            
             return otima;
         }
         else throw new IloException();

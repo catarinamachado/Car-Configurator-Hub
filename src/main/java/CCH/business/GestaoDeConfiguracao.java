@@ -64,12 +64,12 @@ public class GestaoDeConfiguracao {
 		}
 
 		ConfiguracaoOtima c = new ConfiguracaoOtima();
+    
 		Collection<Componente> componentesObrigatorios = configuracoes.getComponentes(configuracao.getId()).values();
 
 		try {
 			return c.configuracaoOtima(componentesObrigatorios,componentes,pacotes,valor);
 		} catch (IloException e) {
-			e.printStackTrace();
 			throw new NoOptimalConfigurationException();
 		}
 	}

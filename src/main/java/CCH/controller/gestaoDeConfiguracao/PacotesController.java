@@ -1,7 +1,12 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
-import CCH.business.*;
+
+import CCH.business.CCH;
+import CCH.business.Configuracao;
+import CCH.business.GestaoDeConfiguracao;
+import CCH.business.Pacote;
+
 import CCH.exception.PacoteJaAdicionadoException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,11 +19,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import java.io.IOException;
 
 public class PacotesController {
     @FXML public TableView table;
