@@ -17,8 +17,6 @@ public class ConfiguracaoOtima {
                 if (comps.containsKey(k) && c.getId() < k) {
                     IloIntVar kvalue = comps.get(k);
                     cplex.addLe(cplex.sum(value,kvalue),1);
-                } else if (c.getId() > k) {//otimização para não repetir restrições uma vez que a incompatibilidade funciona nas duas direções
-                    cplex.addEq(0, value);//se o componente não estiver em comps o modelo não o seleciona, Para prevenir Erros.
                 }
             }
 
