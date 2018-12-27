@@ -51,13 +51,12 @@ public class ConfiguracaoController {
         addDeleteButtonToTableColumn(observableList.get(3));
 
         table.setItems(getComponentes());
+        table.refresh();
     }
 
     private ObservableList<Componente> getComponentes() {
         ObservableList<Componente> componentes = FXCollections.observableArrayList();
-        componentes.addAll(
-                gestaoDeConfiguracao.getComponentes(
-                                configuracao.getId()));
+        componentes.addAll(configuracao.consultarComponentes().values());
         return componentes;
     }
 
@@ -79,7 +78,7 @@ public class ConfiguracaoController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK){
-                                gestaoDeConfiguracao.removerComponente(configuracao.getId(), componente.getId());
+                                configuracao.removerComponente(componente.getId());
                                 table.setItems(getComponentes());
                                 table.refresh();
                             }
@@ -110,7 +109,8 @@ public class ConfiguracaoController {
 
     @FXML
     public void loadPacotes() throws IOException {
-        //redirectTo("/views/gestaoDeConfiguracao/pacotes.fxml");
+        PacotesController.setConfiguracao(configuracao);
+        redirectTo("/views/gestaoDeConfiguracao/pacotes.fxml");
     }
 
     @FXML
@@ -133,10 +133,11 @@ public class ConfiguracaoController {
                         new FXMLLoader(getClass().getResource(fxml)).load()));
 
         stage.showAndWait();
+        initialize();
     }
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

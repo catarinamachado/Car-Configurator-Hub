@@ -11,7 +11,6 @@ import CCH.exception.WrongCredentialsException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CCH {
 	private GestaoDeConfiguracao gestaoDeConfiguracao;
@@ -126,10 +125,10 @@ public class CCH {
 	}
 
 
-	public Configuracao ConfiguracaoOtima(double valor) throws NoOptimalConfigurationException {
+	public Configuracao ConfiguracaoOtima(Configuracao configuracao, double valor) throws NoOptimalConfigurationException {
 		Collection<Pacote> pacs = pacoteDAO.values();
 		Collection<Componente> comps = componenteDAO.values();
-		return gestaoDeConfiguracao.configuracaoOtima(pacs,comps,valor);
+		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,configuracao,valor);
 	}
 	
 

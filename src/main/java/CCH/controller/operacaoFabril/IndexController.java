@@ -16,6 +16,7 @@ import javafx.scene.control.TableColumn.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -104,6 +105,6 @@ public class IndexController {
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

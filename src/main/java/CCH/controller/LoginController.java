@@ -65,12 +65,11 @@ public class LoginController {
         Stage stage = new Stage();
         stage.initOwner(loginButton.getScene().getWindow());
         stage.setScene(new Scene(loader.load()));
-
         stage.showAndWait();
     }
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

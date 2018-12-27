@@ -64,6 +64,9 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
     }
 
     public Configuracao put(Integer key, Configuracao value) {
+        if (containsKey(key)) {
+            return update(key, value);
+        }
         try {
             Statement stm = conn.createStatement();
 
@@ -79,12 +82,41 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
     }
 
+    public Configuracao update(Integer key, Configuracao value) {
+        try {
+            Statement stm = conn.createStatement();
+
+            String sql = "UPDATE Configuracao SET id = " +
+                    key +
+                    ", preco = " +
+                    value.getPreco() +
+                    ", desconto = " +
+                    value.getDesconto() +
+                    " WHERE id = " +
+                    key +
+                    ";";
+
+            int i = stm.executeUpdate(sql);
+
+            return get(key);
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
     public Configuracao remove(Object key) {
         try {
             Configuracao al = this.get(key);
             Statement stm = conn.createStatement();
-            String sql = "DELETE FROM Configuracao WHERE id = " + key;
+
+            String sql = "DELETE FROM Configuracao_has_Componente WHERE Configuracao_id = " + key;
             int i  = stm.executeUpdate(sql);
+
+            sql = "DELETE FROM Configuracao_has_Pacote WHERE Configuracao_id = " + key;
+            i  = stm.executeUpdate(sql);
+
+            sql = "DELETE FROM Configuracao WHERE id = " + key;
+            i  = stm.executeUpdate(sql);
+
             return al;
         }
         catch (Exception e) {throw new NullPointerException(e.getMessage());}
@@ -220,7 +252,7 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
         }
     }
 
-    public void removeComponente(Integer configuracaoId, Integer componenteId) {
+    public Componente removeComponente(Integer configuracaoId, Integer componenteId) {
         try {
             Statement stm = conn.createStatement();
             String sql = "DELETE FROM Configuracao_has_Componente WHERE Configuracao_id=" +
@@ -230,6 +262,7 @@ public class ConfiguracaoDAO implements Map<Integer, Configuracao> {
                     ";";
 
             int i = stm.executeUpdate(sql);
+            return componenteDAO.get(componenteId);
         }
         catch (Exception e) {
             throw new NullPointerException(e.getMessage());

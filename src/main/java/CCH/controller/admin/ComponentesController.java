@@ -21,6 +21,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.Optional;
+import javafx.stage.Stage;
 
 public class ComponentesController {
     @FXML
@@ -126,6 +127,6 @@ public class ComponentesController {
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

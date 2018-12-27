@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class EncomendaController {
     @FXML public Button back;
@@ -18,8 +19,6 @@ public class EncomendaController {
     @FXML public TextField morada;
     @FXML public TextField pais;
     @FXML public TextField email;
-
-
 
     private static Configuracao configuracao;
     public static void setConfiguracao(Configuracao newConfiguracao) {
@@ -65,6 +64,6 @@ public class EncomendaController {
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

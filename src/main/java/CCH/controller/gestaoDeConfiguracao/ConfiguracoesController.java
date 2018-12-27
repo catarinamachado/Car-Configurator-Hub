@@ -36,13 +36,14 @@ public class ConfiguracoesController {
 
 
         observableList.get(1).setCellValueFactory(
-                new PropertyValueFactory<Configuracao, Double>("preco")
+                new PropertyValueFactory<Configuracao, Double>("precoFinal")
         );
 
         addDeleteButtonToTableColumn(observableList.get(2));
 
         table.setItems(getConfiguracoes());
         setSelection();
+        table.refresh();
     }
 
     private void setSelection() {
@@ -63,6 +64,7 @@ public class ConfiguracoesController {
                         stage.setScene(scene);
 
                         stage.showAndWait();
+                        initialize();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -129,6 +131,6 @@ public class ConfiguracoesController {
 
     @FXML
     public void back() {
-        back.getScene().getWindow().hide();
+        ((Stage) back.getScene().getWindow()).close();
     }
 }

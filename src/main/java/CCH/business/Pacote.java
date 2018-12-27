@@ -5,23 +5,20 @@ import CCH.dataaccess.PacoteDAO;
 import CCH.exception.ComponenteIncompativelNoPacoteException;
 import CCH.exception.ComponenteJaExisteNoPacoteException;
 
-import java.util.List;
+import java.util.Map;
 
 public class Pacote {
-	private ComponenteDAO componentes;
 	private int id;
 	private double desconto;
-
 	private PacoteDAO pacoteDAO = new PacoteDAO();
+
 
 	public Pacote(int id, double desconto) {
 		this.id = id;
 		this.desconto = desconto;
-		this.componentes = new ComponenteDAO();
 	}
 
 	public Pacote() {
-		this.id = pacoteDAO.getNextId();
 		this.desconto = 0.0;
 	}
 
@@ -41,12 +38,8 @@ public class Pacote {
 		this.desconto = desconto;
 	}
 
-	public ComponenteDAO getComponentes() {
-		return componentes;
-	}
-
-	public void setComponentes(ComponenteDAO componentes) {
-		this.componentes = componentes;
+	public Map<Integer, Componente> getComponentes() {
+		return pacoteDAO.getComponentes(id);
 	}
 
 	/**
@@ -86,9 +79,4 @@ public class Pacote {
 	public void atualizarDesconto(Pacote pacote) {
 		pacoteDAO.updateDesconto(pacote);
 	}
-
-	public List<Integer> idsComponentes() {
-		return null;
-	}
-
 }
