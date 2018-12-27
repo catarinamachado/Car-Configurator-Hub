@@ -74,11 +74,12 @@ public class CCH {
 	 */
 	public Utilizador iniciarSessao(int id, String password) throws WrongCredentialsException {
 		Utilizador utilizador = utilizadorDAO.get(id);
-		boolean loggedIn = utilizador.validarCredenciais(id, password);
-
-		if (!loggedIn) {
+		if (utilizador == null)
 			throw new WrongCredentialsException();
-		}
+
+		boolean loggedIn = utilizador.validarCredenciais(id, password);
+		if (!loggedIn)
+			throw new WrongCredentialsException();
 
 		return utilizador;
 	}

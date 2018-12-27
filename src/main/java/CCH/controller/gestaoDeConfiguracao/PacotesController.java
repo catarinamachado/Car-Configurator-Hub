@@ -4,7 +4,6 @@ import CCH.CarConfiguratorHubApplication;
 
 import CCH.business.CCH;
 import CCH.business.Configuracao;
-import CCH.business.GestaoDeConfiguracao;
 import CCH.business.Pacote;
 
 import CCH.exception.PacoteJaAdicionadoException;
@@ -19,9 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import java.io.IOException;
 
@@ -36,7 +33,6 @@ public class PacotesController {
     }
 
     private CCH cch = CarConfiguratorHubApplication.getCch();
-    private GestaoDeConfiguracao gestaoDeConfiguracao = cch.getGestaoDeConfiguracao();
 
     @FXML
     public void initialize() {
@@ -97,8 +93,8 @@ public class PacotesController {
 
     private void loadComponentes(Pacote pacote) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/gestaoDeConfiguracao/componentes.fxml"));
-            ComponentesController.setPacote(pacote);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/gestaoDeConfiguracao/componentesNoPacote.fxml"));
+            ComponentesNoPacoteController.setPacote(pacote);
             Parent root = fxmlLoader.load();
 
             Scene scene = new Scene(root);
@@ -126,7 +122,7 @@ public class PacotesController {
                         if (pacote != null) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Confirmação");
-                            alert.setHeaderText(pacote.getNome() + " será substituido por " + novoPacote.getId());
+                            alert.setHeaderText(pacote.getNome() + " será substituido por " + novoPacote.getId() + ".");
                             alert.setContentText("Confirmar?");
 
                             Optional<ButtonType> result = alert.showAndWait();
@@ -141,7 +137,7 @@ public class PacotesController {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro");
                     alert.setHeaderText("Pacote já adicionado");
-                    alert.setContentText("Esta configuração já contém o " + novoPacote.getNome());
+                    alert.setContentText("Esta configuração já contém o " + novoPacote.getNome() + ".");
 
                     alert.showAndWait();
                 } catch (Exception e) {

@@ -99,7 +99,7 @@ public class ComponenteDAO implements Map<Integer, Componente> {
 
             ResultSet rs = stm.executeQuery(sql);
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Componente componente;
 
                 if (rs.getInt(1) == componenteId)
@@ -124,7 +124,7 @@ public class ComponenteDAO implements Map<Integer, Componente> {
             String sql = "SELECT * FROM Componente_requer_Componente WHERE Componente_id=" + componenteId;
             ResultSet rs = stm.executeQuery(sql);
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Componente componente = get(rs.getInt(2));
                 componentes.put(componente.getId(), componente);
             }

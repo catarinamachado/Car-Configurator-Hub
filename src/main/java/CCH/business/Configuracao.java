@@ -2,24 +2,21 @@ package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.PacoteDAO;
-
 import CCH.exception.ComponenteJaAdicionadoException;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
+import CCH.exception.PacoteJaAdicionadoException;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import CCH.exception.PacoteJaAdicionadoException;
 import ilog.concert.IloException;
 
 import java.util.*;
 
-import CCH.exception.PacoteJaAdicionadoException;
-import ilog.concert.IloException;
 
 public class Configuracao {
-
 	private int id;
 	private double preco;
 	private double desconto;
@@ -183,14 +180,6 @@ public class Configuracao {
 		return null;
 	}
 
-	/**
-	 *
-	 * @param componentes
-	 */
-	public void aceitarConfiguracaoOtima(List<Componente> componentes) {
-		// TODO - implement Configuracao.aceitarConfiguracaoOtima
-		throw new UnsupportedOperationException();
-	}
 
 	public String getNome() {
 		return "Configuração " + id;
@@ -241,12 +230,39 @@ public class Configuracao {
 
 		Collection<Componente> requeridosValues = requeridos.values();
 
-		if(!componentes.values().containsAll(requeridosValues)) {
-			throw new EncomendaRequerOutrosComponentes();
+		for (Componente req : requeridosValues) {
+			if (!componentes.keySet().contains(req.getId()))
+				throw new EncomendaRequerOutrosComponentes();
 		}
 	}
 
 	public double getPrecoFinal() {
 		return preco-desconto;
 	}
+
+	public List<Componente> componentesIncompativeisNaConfig (Componente componente) {
+		List<Componente> incompativeis = new ArrayList<>();
+
+		for(Componente componenteIncomp : componente.getIncompativeis().values()) {
+			if (this.consultarComponentes().containsKey(componenteIncomp.getId())) {
+				incompativeis.add(componenteIncomp);
+			}
+		}
+
+		return incompativeis;
+	}
+
+	public List<Componente> componentesRequeridosQueNaoEstaoConfig (Componente componente) {
+		List<Componente> requeridos = new ArrayList<>();
+
+		for(Componente componenteRequerido : componente.getRequeridos().values()) {
+			if (!this.consultarComponentes().containsKey(componenteRequerido.getId())) {
+				requeridos.add(componenteRequerido);
+			}
+		}
+
+		return requeridos;
+	}
+
+
 }

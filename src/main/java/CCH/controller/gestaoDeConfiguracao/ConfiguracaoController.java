@@ -104,7 +104,8 @@ public class ConfiguracaoController {
 
     @FXML
     public void loadComponentes() throws IOException {
-        //redirectTo("/views/gestaoDeConfiguracao/componentes.fxml");
+        ComponentesController.setConfiguracao(configuracao);
+        redirectTo("/views/gestaoDeConfiguracao/componentes.fxml");
     }
 
     @FXML
