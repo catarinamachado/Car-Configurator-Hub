@@ -84,6 +84,7 @@ public class ComponentesController {
 
                         if (flag) {
                             configuracao.adicionarComponente(novoComponente.getId());
+                            configuracao.checkforPacotesInConfiguration();
                         }
 
                         ((Stage) back.getScene().getWindow()).close();

@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.gestaoDeConfiguracao.ConfiguracaoController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="393.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCH.controller.gestaoDeConfiguracao.ConfiguracaoController">
     <children>
-        <TableView fx:id="table" layoutX="60.0" layoutY="21.0" prefHeight="290.0" prefWidth="480">
+        <TableView fx:id="table" layoutX="60.0" layoutY="21.0" prefHeight="167.0" prefWidth="480">
             <columns>
                 <TableColumn prefWidth="170.0" style="-fx-alignment: center;" text="Componente" />
                 <TableColumn prefWidth="122.0" style="-fx-alignment: center;" text="Stock" />
@@ -20,5 +20,14 @@
       <Button layoutX="236.0" layoutY="323.0" mnemonicParsing="false" onMouseReleased="#loadPacotes" prefHeight="27.0" prefWidth="129.0" text="Pacotes" />
       <Button layoutX="411.0" layoutY="323.0" mnemonicParsing="false" onMouseReleased="#configOtima" prefHeight="27.0" prefWidth="129.0" text="Config. Ótima" />
       <Button layoutX="60.0" layoutY="359.0" mnemonicParsing="false" onMouseReleased="#criarEncomenda" prefHeight="27.0" prefWidth="480.0" text="Criar Encomenda" />
+      <TableView fx:id="tablepacs" layoutX="60.0" layoutY="188.0" prefHeight="133.0" prefWidth="480">
+         <columns>
+             <TableColumn prefWidth="170.0" style="-fx-alignment: center;" text="Pacote" />
+             <TableColumn prefWidth="122.0" style="-fx-alignment: center;" text="Componentes" />
+             <TableColumn prefWidth="97.0" style="-fx-alignment: center;" text="Desconto (€)" />
+             <TableColumn prefWidth="85.0" style="-fx-alignment: center;" />
+             <TableColumn minWidth="0.0" prefWidth="1.0" style="-fx-alignment: center;" />
+         </columns>
+      </TableView>
     </children>
 </Pane>
