@@ -1,11 +1,9 @@
 package CCH.business;
 
+import CCH.dataaccess.ClasseComponenteDAO;
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.PacoteDAO;
-import CCH.exception.ComponenteJaAdicionadoException;
-import CCH.exception.EncomendaRequerOutrosComponentes;
-import CCH.exception.EncomendaTemComponentesIncompativeis;
-import CCH.exception.PacoteJaAdicionadoException;
+import CCH.exception.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +12,7 @@ import java.util.Map;
 import ilog.concert.IloException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Configuracao {
@@ -191,11 +190,12 @@ public class Configuracao {
 				'}';
 	}
 
-	public Map<Integer, Componente> verificaValidade() throws EncomendaTemComponentesIncompativeis, EncomendaRequerOutrosComponentes {
+	public Map<Integer, Componente> verificaValidade() throws EncomendaTemComponentesIncompativeis, EncomendaRequerOutrosComponentes, EncomendaRequerObrigatoriosException {
 		Map<Integer, Componente> componentes = configuracaoDAO.getComponentes(id);
 		temIncompativeis(componentes);
 		requerOutros(componentes);
-
+		if(!this.temComponentesObrigatorios())
+			throw new EncomendaRequerObrigatoriosException();
 		return componentes;
 	}
 
@@ -299,5 +299,12 @@ public class Configuracao {
 			configuracaoDAO.removePacote(this.id,pacoteId);
 			configuracaoDAO.put(this.id,this);
 		}
+	}
+
+	public boolean temComponentesObrigatorios() {
+		ClasseComponenteDAO cdao = new ClasseComponenteDAO();
+		List<Integer> idsTiposObrigatorios = cdao.values().stream().filter(p -> p.getEObrigatorio()).map(p -> p.getId()).collect(Collectors.toList());
+		Collection<Integer> idsTiposNaClasse = this.consultarComponentes().values().stream().map(c -> c.getClasseComponente().getId()).collect(Collectors.toSet());
+		return idsTiposNaClasse.containsAll(idsTiposObrigatorios);
 	}
 }

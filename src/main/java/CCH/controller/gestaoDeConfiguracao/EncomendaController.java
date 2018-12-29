@@ -2,7 +2,9 @@ package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
 import CCH.business.Configuracao;
+import CCH.business.Encomenda;
 import CCH.business.GestaoDeConfiguracao;
+import CCH.exception.EncomendaRequerObrigatoriosException;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
 import javafx.fxml.FXML;
@@ -56,6 +58,13 @@ public class EncomendaController {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Alguns componentes são incompatíveis!");
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        } catch (EncomendaRequerObrigatoriosException e){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Encomenda requer Componentes Obrigatórios!");
             alert.setContentText(e.getMessage());
 
             alert.showAndWait();

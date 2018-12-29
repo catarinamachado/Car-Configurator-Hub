@@ -2,9 +2,7 @@ package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.EncomendaDAO;
-import CCH.exception.EncomendaRequerOutrosComponentes;
-import CCH.exception.EncomendaTemComponentesIncompativeis;
-import CCH.exception.NoOptimalConfigurationException;
+import CCH.exception.*;
 import ilog.concert.IloException;
 
 import java.util.*;
@@ -50,17 +48,25 @@ public class GestaoDeConfiguracao {
 				String moradaCliente,
 				String paisCliente,
 				String emailCliente
-	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis {
+	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
 		Map<Integer, Componente> componentes = configuracao.verificaValidade();
-
 		int id = encomendas.getNextId();
 		Encomenda encomenda = new Encomenda(componentes, id, configuracao.getPreco(), nomeCliente, numeroDeIdentificacaoCliente, moradaCliente, paisCliente, emailCliente);
 		encomendas.put(id, encomenda);
 	}
 
-	public Configuracao configuracaoOtima(Collection<Componente> componentes, Collection<Pacote> pacotes, Configuracao configuracao, double valor) throws NoOptimalConfigurationException {
+	public Configuracao configuracaoOtima(Collection<Componente> componentes, Collection<Pacote> pacotes, Configuracao configuracao, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
 		if (valor < 0) {
 			throw new NoOptimalConfigurationException("Negative Value");
+		}
+
+		try {
+			configuracao.verificaValidade();
+		} catch (EncomendaTemComponentesIncompativeis encomendaTemComponentesIncompativeis) {
+			throw new NoOptimalConfigurationException();
+		} catch (EncomendaRequerOutrosComponentes encomendaRequerOutrosComponentes) {
+		} catch (EncomendaRequerObrigatoriosException e) {
+			throw new ConfiguracaoNaoTemObrigatoriosException();
 		}
 
 		ConfiguracaoOtima c = new ConfiguracaoOtima();

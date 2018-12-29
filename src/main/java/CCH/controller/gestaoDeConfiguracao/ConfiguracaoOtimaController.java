@@ -1,6 +1,7 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.business.*;
+import CCH.exception.ConfiguracaoNaoTemObrigatoriosException;
 import CCH.exception.NoOptimalConfigurationException;
 
 import javafx.collections.FXCollections;
@@ -162,6 +163,12 @@ public class ConfiguracaoOtimaController {
             alert.setTitle("Informação");
             alert.setHeaderText("");
             alert.setContentText("Não existe uma configuração ótima.");
+            alert.showAndWait();
+        } catch (ConfiguracaoNaoTemObrigatoriosException e){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro");
+            alert.setHeaderText("");
+            alert.setContentText("Configuração tem componentes obrigatórios em falta.");
             alert.showAndWait();
         }
 
