@@ -3,10 +3,14 @@ package CCH.dataaccess;
 import CCH.business.Componente;
 import CCH.business.Encomenda;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.*;
 
 public class EncomendaDAO implements Map<Integer, Encomenda> {
 
@@ -62,15 +66,19 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
     public Encomenda put(Integer key, Encomenda value) {
         try {
             Statement stm = conn.createStatement();
-
+            int idEncomenda = value.getId();
             stm.executeUpdate("DELETE FROM Encomenda WHERE id='"+key+"'");
             String sql = "INSERT INTO Encomenda VALUES ('" +
-                    value.getId() + "','" + value.getNomeCliente() + "','" + value.getNumeroDeIdentificacaoCliente() +
+                    idEncomenda + "','" + value.getNomeCliente() + "','" + value.getNumeroDeIdentificacaoCliente() +
                     "','" + value.getMoradaCliente() + "','" + value.getPaisCliente() +
                     "','" + value.getEmailCliente() +
                     "','" + value.getId() + "');";
 
             int i  = stm.executeUpdate(sql);
+
+            for (int idComponente : value.getComponentes().keySet()) {
+                putComponente(idEncomenda, idComponente);
+            }
 
             return get(key);
         }
@@ -142,7 +150,7 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
             ResultSet rs = stm.executeQuery(sql);
 
             ComponenteDAO componenteDAO = new ComponenteDAO();
-            if (rs.next()) {
+            while (rs.next()) {
                 Componente componente = componenteDAO.get(rs.getInt(2));
                 componentes.put(componente.getId(), componente);
             }
@@ -182,5 +190,16 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
 
     public Set<Integer> keySet() {
         throw new NullPointerException("Not implemented!");
+    }
+
+    public void putComponente (int idEncomenda, int idComponente) {
+        try {
+            System.out.println("estou a pôr o " + idComponente);
+            Statement stm = conn.createStatement();
+            String sql = "INSERT INTO Encomenda_has_Componente VALUES ('" +
+                    idEncomenda + "','" + idComponente + "');";
+            stm.executeUpdate(sql);
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
     }
 }
