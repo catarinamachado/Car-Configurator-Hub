@@ -194,7 +194,6 @@ public class EncomendaDAO implements Map<Integer, Encomenda> {
 
     public void putComponente (int idEncomenda, int idComponente) {
         try {
-            System.out.println("estou a pôr o " + idComponente);
             Statement stm = conn.createStatement();
             String sql = "INSERT INTO Encomenda_has_Componente VALUES ('" +
                     idEncomenda + "','" + idComponente + "');";
