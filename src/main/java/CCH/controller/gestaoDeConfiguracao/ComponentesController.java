@@ -16,8 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import java.lang.StringBuilder;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public class ComponentesController {
@@ -70,21 +69,33 @@ public class ComponentesController {
                 try {
                     if (event.getClickCount() == 2 && (!row.isEmpty())) {
                         novoComponente = row.getItem();
+                        Map<Integer,Componente> comps = new HashMap<>();
+                        comps.put(novoComponente.getId(), novoComponente);
 
-                        List<Componente> incompativeis = configuracao.componentesIncompativeisNaConfig(novoComponente);
-                        List<Componente> requeridos = configuracao.componentesRequeridosQueNaoEstaoConfig(novoComponente);
+                        List<Componente> incompativeis = configuracao.componentesIncompativeisNaConfig(comps);
+                        List<Componente> requeridos = configuracao.componentesRequeridosQueNaoEstaoConfig(comps);
                         boolean flag = true;
+                        boolean adquiriu = true;
 
                         if (incompativeis.size() != 0) {
-                            flag = temIncompativeis(incompativeis);
+                            flag = temProblemas("i", incompativeis);
                             if (flag && requeridos.size() != 0)
-                                flag = temRequeridos(requeridos);
+                                flag = temProblemas("r", requeridos);
                         } else if (requeridos.size() != 0)
-                            flag = temRequeridos(requeridos);
+                            flag = temProblemas("r", requeridos);
 
                         if (flag) {
                             configuracao.adicionarComponente(novoComponente.getId());
-                            configuracao.checkforPacotesInConfiguration();
+                            adquiriu = configuracao.checkforPacotesInConfiguration();
+                        }
+
+                        if (adquiriu) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Informação");
+                            alert.setHeaderText("Pacote adquirido!");
+                            alert.setContentText("O componente que adicionou formou um pacote na configuração.");
+
+                            alert.showAndWait();
                         }
 
                         ((Stage) back.getScene().getWindow()).close();
@@ -104,42 +115,24 @@ public class ComponentesController {
         });
     }
 
-
-    public boolean temIncompativeis(List<Componente> incompativeis) {
+    public boolean temProblemas(String tipo, List<Componente> componentes) {
         StringBuilder str = new StringBuilder("Componente: ");
+
         int i = 0;
-        for(i = 0; i < incompativeis.size() - 1 ; i++) {
-            str.append(incompativeis.get(i).getFullName() + ", ");
+        for(i = 0; i < componentes.size() - 1 ; i++) {
+            str.append(componentes.get(i).getFullName() + ", ");
         }
-        str.append(incompativeis.get(i).getFullName() + ".");
+        str.append(componentes.get(i).getFullName() + ".");
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmação");
-        alert.setHeaderText("O componente que pretende adicionar é incompatível com o " +
-                str);
-        alert.setContentText("Pretende adicionar o componente na mesma?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
+        if (tipo.equals("i")) {
+            alert.setHeaderText("O componente que pretende adicionar é incompatível com o " +
+                    str);
         } else {
-            return false;
+            alert.setHeaderText("O componente que pretende adicionar requer o " +
+                    str);
         }
-    }
-
-    public boolean temRequeridos(List<Componente> requeridos) {
-        StringBuilder str = new StringBuilder("Componente: ");
-        int i = 0;
-        for(i = 0; i < requeridos.size() - 1 ; i++) {
-            str.append(requeridos.get(i).getFullName() + ", ");
-
-        }
-        str.append(requeridos.get(i).getFullName() + ".");
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmação");
-        alert.setHeaderText("O componente que pretende adicionar requer o " +
-                str);
         alert.setContentText("Pretende adicionar o componente na mesma?");
 
         Optional<ButtonType> result = alert.showAndWait();

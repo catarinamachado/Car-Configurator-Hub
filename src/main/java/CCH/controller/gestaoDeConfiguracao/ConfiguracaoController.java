@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ConfiguracaoController {
@@ -106,8 +109,16 @@ public class ConfiguracaoController {
                             alert.setContentText("Pretende continuar?");
 
                             Optional<ButtonType> result = alert.showAndWait();
-                            if (result.get() == ButtonType.OK){
-                                configuracao.removerComponente(componente.getId());
+                            if (result.get() == ButtonType.OK) {
+                                List<Componente> requeridos = configuracao.componentesRequeremMeNaConfig(componente.getId());
+                                boolean flag = true;
+
+                                if (requeridos.size() != 0)
+                                    flag = temRequeridos(requeridos);
+
+                                if (flag)
+                                    configuracao.removerComponente(componente.getId());
+
                                 table.setItems(getComponentes());
                                 table.refresh();
                             }
@@ -230,12 +241,13 @@ public class ConfiguracaoController {
 
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Aviso");
-                            alert.setHeaderText("Os componentes do " + pacote.getNome() + "não serão removidos.");
+                            alert.setHeaderText("Os componentes do " + pacote.getNome() + " não serão removidos.");
                             alert.setContentText("Pretende continuar ?");
 
                             Optional<ButtonType> result = alert.showAndWait();
-                            if (result.get() == ButtonType.OK){
+                            if (result.get() == ButtonType.OK) {
                                 configuracao.removerPacote(pacote.getId());
+
                                 table.setItems(getComponentes());
                                 table.refresh();
                                 tablepacs.setItems(getPacotes());
@@ -259,6 +271,30 @@ public class ConfiguracaoController {
         };
 
         t.setCellFactory(cellFactory);
+    }
+
+    public boolean temRequeridos(List<Componente> componentes) {
+        StringBuilder str = new StringBuilder("Componente: ");
+
+        int i = 0;
+        for(i = 0; i < componentes.size() - 1 ; i++) {
+            str.append(componentes.get(i).getFullName() + ", ");
+        }
+        str.append(componentes.get(i).getFullName() + ".");
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmação");
+            alert.setHeaderText("O componente que pretende remover é requerido pelo " +
+                    str);
+
+        alert.setContentText("Pretende remover o componente na mesma?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @FXML

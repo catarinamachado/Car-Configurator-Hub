@@ -11,8 +11,8 @@
             <columns>
                 <TableColumn prefWidth="167.0" style="-fx-alignment: center;" text="Componentes" />
                 <TableColumn prefWidth="120.0" style="-fx-alignment: center;" text="Stock" />
-                <TableColumn prefWidth="100.0" style="-fx-alignment: center;" text="Preço (€)" />
-                <TableColumn prefWidth="90.0" style="-fx-alignment: center;"/>
+                <TableColumn prefWidth="75.0" style="-fx-alignment: center;" text="Preço (€)" />
+                <TableColumn prefWidth="100.0" style="-fx-alignment: center;"/>
             </columns>
         </TableView>
         <Button fx:id="back" style="-fx-background-color: #f3f3f3;" onMouseReleased="#back" layoutY="1.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="42.0" text="&lt;-" />

@@ -381,15 +381,16 @@ public class Configuracao {
 	 *
 	 * @param componente Componente que se pretende analisar
 	 */
-	public List<Componente> componentesIncompativeisNaConfig (Componente componente) {
+	public List<Componente> componentesIncompativeisNaConfig(Map<Integer,Componente> componentes) {
 		List<Componente> incompativeis = new ArrayList<>();
 
-		for(Componente componenteIncomp : componente.getIncompativeis().values()) {
-			if (this.consultarComponentes().containsKey(componenteIncomp.getId())) {
-				incompativeis.add(componenteIncomp);
+		for (Componente c : componentes.values()) {
+			for (Componente componenteIncomp : c.getIncompativeis().values()) {
+				if (this.consultarComponentes().containsKey(componenteIncomp.getId())) {
+					incompativeis.add(componenteIncomp);
+				}
 			}
 		}
-
 		return incompativeis;
 	}
 
@@ -399,13 +400,32 @@ public class Configuracao {
 	 *
 	 * @param componente Componente que se pretende analisar
 	 */
-	public List<Componente> componentesRequeridosQueNaoEstaoConfig (Componente componente) {
+	public List<Componente> componentesRequeridosQueNaoEstaoConfig(Map<Integer,Componente> componentes) {
 		List<Componente> requeridos = new ArrayList<>();
 
-		for(Componente componenteRequerido : componente.getRequeridos().values()) {
-			if (!this.consultarComponentes().containsKey(componenteRequerido.getId())) {
-				requeridos.add(componenteRequerido);
+		for (Componente c : componentes.values()) {
+			for (Componente componenteRequerido : c.getRequeridos().values()) {
+				if (!this.consultarComponentes().containsKey(componenteRequerido.getId())) {
+					requeridos.add(componenteRequerido);
+				}
 			}
+		}
+
+		return requeridos;
+	}
+
+  /**
+	 * Devolve a lista dos componentes que estão na configuração que requerem
+   * o componente passado como parâmetro.
+	 *
+	 * @param componenteId Id do componente que se pretende analisar
+	 */
+	public List<Componente> componentesRequeremMeNaConfig(int componenteId) {
+		List<Componente> requeridos = new ArrayList<>();
+
+		for (Componente componenteRequerMe : this.consultarComponentes().values()) {
+			if (componenteRequerMe.getRequeridos().containsKey(componenteId))
+				requeridos.add(componenteRequerMe);
 		}
 
 		return requeridos;
@@ -416,25 +436,30 @@ public class Configuracao {
 	 * pacote. Em caso afirmativo, substitui os componentes isolados pelo
 	 * pacote.
 	 */
-	public void checkforPacotesInConfiguration() {
+	public boolean checkforPacotesInConfiguration() {
 		Collection<Pacote> pacotes = this.pacoteDAO.values();
 		Map<Integer,Componente> compsNotInPacotes = this.componentesNotInPacotes();
-		for (Pacote p : pacotes) {
+		
+    for (Pacote p : pacotes) {
 			Collection<Componente> comps = p.getComponentes().values();
 			boolean containsPacote = true;
 			for (Componente c : comps) {
 				containsPacote = containsPacote && compsNotInPacotes.containsKey(c.getId());
 			}
+
 			if (containsPacote && comps.size()!=0) {
 				try {
 					for (Componente c : comps)
 					    compsNotInPacotes.remove(c.getId());
 					this.adicionarPacote(p.getId(),null);
+					return true;
 				} catch (PacoteJaAdicionadoException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+
+		return false;
 	}
 
 	/**

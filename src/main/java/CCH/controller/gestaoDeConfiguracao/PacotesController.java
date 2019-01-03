@@ -3,6 +3,7 @@ package CCH.controller.gestaoDeConfiguracao;
 import CCH.CarConfiguratorHubApplication;
 
 import CCH.business.CCH;
+import CCH.business.Componente;
 import CCH.business.Configuracao;
 import CCH.business.Pacote;
 
@@ -18,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import java.util.List;
 import java.util.Optional;
 
 import java.io.IOException;
@@ -113,11 +116,25 @@ public class PacotesController {
             row.setOnMouseClicked(event -> {
                 Pacote novoPacote = null;
                 Pacote pacote = null;
+
                 try {
                     if (event.getClickCount() == 2 && (!row.isEmpty())) {
                         novoPacote = row.getItem();
 
-                        pacote = configuracao.adicionarPacote(novoPacote.getId(), null);
+                        List<Componente> incompativeis = configuracao.componentesIncompativeisNaConfig(novoPacote.getComponentes());
+                        List<Componente> requeridos = configuracao.componentesRequeridosQueNaoEstaoConfig(novoPacote.getComponentes());
+                        boolean flag = true;
+
+                        if (incompativeis.size() != 0) {
+                            flag = temProblemas("i", incompativeis);
+                            if (flag && requeridos.size() != 0)
+                                flag = temProblemas("r", requeridos);
+                        } else if (requeridos.size() != 0)
+                            flag = temProblemas("r", requeridos);
+
+                        if (flag) {
+                            pacote = configuracao.adicionarPacote(novoPacote.getId(), null);
+                        }
 
                         if (pacote != null) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -146,6 +163,34 @@ public class PacotesController {
             });
             return row;
         });
+    }
+
+    public boolean temProblemas(String tipo, List<Componente> componentes) {
+        StringBuilder str = new StringBuilder("Componente: ");
+
+        int i = 0;
+        for(i = 0; i < componentes.size() - 1 ; i++) {
+            str.append(componentes.get(i).getFullName() + ", ");
+        }
+        str.append(componentes.get(i).getFullName() + ".");
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmação");
+        if (tipo.equals("i")) {
+            alert.setHeaderText("O pacote que pretende adicionar tem componentes incompatíveis com o " +
+                    str);
+        } else {
+            alert.setHeaderText("O pacote que pretende adicionar possui componentes que requerem o " +
+                    str);
+        }
+        alert.setContentText("Pretende adicionar o pacote na mesma?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @FXML

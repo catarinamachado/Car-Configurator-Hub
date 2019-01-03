@@ -5,15 +5,14 @@ import CCH.business.Componente;
 import CCH.business.Encomenda;
 import CCH.business.OperacaoFabril;
 import CCH.exception.SemEncomendasDisponiveisException;
+import CCH.exception.StockInvalidoException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.*;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
@@ -68,9 +67,14 @@ public class IndexController {
                 new PropertyValueFactory<Componente, Double>("preco")
         );
 
-        ObservableList<Componente> componenteList = FXCollections.observableArrayList();
-        componenteList.addAll(operacaoFabril.consultarComponentes());
-        table.setItems(componenteList);
+        table.setItems(getComponentes());
+}
+
+    private ObservableList<Componente> getComponentes() {
+        ObservableList<Componente> componentesList = FXCollections.observableArrayList();
+        componentesList.addAll(operacaoFabril.consultarComponentes());
+
+        return componentesList;
     }
 
     @FXML
@@ -86,6 +90,8 @@ public class IndexController {
         } catch (SemEncomendasDisponiveisException e) {
             idEncomenda.setText("Nenhuma encomenda disponível");
         }
+
+        table.setItems(getComponentes());
     }
 
     @FXML
@@ -96,6 +102,13 @@ public class IndexController {
             try {
                 Encomenda encomenda = operacaoFabril.atualizarStock(componente);
                 idEncomenda.setText(Integer.toString(encomenda.getId()));
+            } catch (StockInvalidoException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Stock Inválido");
+                alert.setContentText("O stock inserido não pode ser menor do que 0.");
+
+                alert.showAndWait();
             } catch (SemEncomendasDisponiveisException e) {
                 idEncomenda.setText("Nenhuma encomenda disponível");
             }

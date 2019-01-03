@@ -66,7 +66,7 @@ public class AdicionarComponentesPacoteController {
             public TableCell<Componente, Void> call(final TableColumn<Componente, Void> param) {
                 final TableCell<Componente, Void> cell = new TableCell<Componente, Void>() {
 
-                    private final Button btn = new Button("Adicionar ao Pacote");
+                    private final Button btn = new Button("Adicionar");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {

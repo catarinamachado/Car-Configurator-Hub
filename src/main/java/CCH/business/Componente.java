@@ -180,4 +180,12 @@ public class Componente {
 
 		return "Indisponível";
 	}
+
+  /**
+	 * Decrementa o stock do componente em uma unidade.
+	 */
+	public void decrementaStock() {
+		setStock(getStock() - 1);
+		componenteDAO.updateStock(this);
+	}
 }
