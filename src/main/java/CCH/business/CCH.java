@@ -364,7 +364,7 @@ public class CCH {
 	}
 
 	public void adicionarComponente(int id) throws ComponenteJaAdicionadoException{
-		gestaoDeConfiguracao.adicionarComponenten(id);
+		gestaoDeConfiguracao.adicionarComponente(id);
 	}
 
 	public List<Componente> componentesIncompativeisNaConfig(Map<Integer, Componente> comps) {

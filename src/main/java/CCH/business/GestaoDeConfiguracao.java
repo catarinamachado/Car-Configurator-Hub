@@ -193,7 +193,7 @@ public class GestaoDeConfiguracao {
 		return configuracaoatual.componentesIncompativeisNaConfig(comps);
 	}
 
-	public void adicionarComponenten(int id) throws ComponenteJaAdicionadoException {
+	public void adicionarComponente(int id) throws ComponenteJaAdicionadoException {
 		configuracaoatual.adicionarComponente(id);
 	}
 
