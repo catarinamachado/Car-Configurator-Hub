@@ -230,22 +230,21 @@ public class CCH {
 	}
 
 	/**
-	 * Método que gera uma configuração ótima, ou seja, uma configuração que tenta
-	 * maximizar a utilização do dinheiro previsto.
+	 * Método que cria uma nova configuração.
 	 *
-	 * @param configuracao Configuração com o ponto de partida para se gerar a
-	 * configuração ótima
-	 * @param valor Valor máximo que o cliente está disposto a gastar
-	 * @return Configuracao ótima gerada
-	 * @throws NoOptimalConfigurationException Caso não exista nenhuma configuração
-	 * ótima tendo em consideração os parâmetros fornecidos
-	 * @throws ConfiguracaoNaoTemObrigatoriosException Caso a configuração não
-	 * contenha os componentes básicos (obrigatórios)
 	 */
-	public Configuracao ConfiguracaoOtima(Configuracao configuracao, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
-		Collection<Pacote> pacs = pacoteDAO.values();
-		Collection<Componente> comps = componenteDAO.values();
-		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,configuracao,valor);
+	public void criarConfiguracao() {
+		gestaoDeConfiguracao.criarConfiguracao();
+	}
+
+	/**
+	 * Método que remove a configuração com o id passado como parâmetro
+	 * do sistema.
+	 *
+	 * @param configuracaoId Id da configuração que se pretende remover
+	 */
+	public void removerConfiguracao(int configuracaoId) {
+		gestaoDeConfiguracao.removerConfiguracao(configuracaoId);
 	}
 
 	/**
@@ -269,13 +268,22 @@ public class CCH {
 	}
 
 	/**
-	 * Método que remove a configuração com o id passado como parâmetro
-	 * do sistema.
+	 * Método que gera uma configuração ótima, ou seja, uma configuração que tenta
+	 * maximizar a utilização do dinheiro previsto.
 	 *
-	 * @param configuracaoId Id da configuração que se pretende remover
+	 * @param configuracao Configuração com o ponto de partida para se gerar a
+	 * configuração ótima
+	 * @param valor Valor máximo que o cliente está disposto a gastar
+	 * @return Configuracao ótima gerada
+	 * @throws NoOptimalConfigurationException Caso não exista nenhuma configuração
+	 * ótima tendo em consideração os parâmetros fornecidos
+	 * @throws ConfiguracaoNaoTemObrigatoriosException Caso a configuração não
+	 * contenha os componentes básicos (obrigatórios)
 	 */
-	public void removerConfiguracao(int configuracaoId) {
-		gestaoDeConfiguracao.removerConfiguracao(configuracaoId);
+	public Configuracao ConfiguracaoOtima(Configuracao configuracao, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
+		Collection<Pacote> pacs = pacoteDAO.values();
+		Collection<Componente> comps = componenteDAO.values();
+		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,configuracao,valor);
 	}
 
 	/**
@@ -290,14 +298,6 @@ public class CCH {
 	 */
 	public void adicionarComponenteAoPacote(Pacote pacote, int componente_id) throws ComponenteJaExisteNoPacoteException, ComponenteIncompativelNoPacoteException {
 		pacote.adicionaComponente(componente_id);
-	}
-
-	/**
-	 * Método que cria uma nova configuração.
-	 *
-	 */
-	public void criarConfiguracao() {
-		gestaoDeConfiguracao.criarConfiguracao();
 	}
 
 	/**
