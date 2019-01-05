@@ -30,15 +30,6 @@ public class OperacaoFabril {
 	}
 
 	/**
-	 * Devolve todos os componentes do sistema.
-	 *
-	 * @return List<Componente> lista com todos os componentes presentes no sistema
-	 */
-	public List<Componente> consultarComponentes() {
-		return new ArrayList<>(componenteDAO.values());
-	}
-
-	/**
 	 * Devolve a próxima encomenda que está pronta a ser produzida (existindo
 	 * em stock todos os componentes necessários para a produção da encomenda).
 	 *

@@ -8,7 +8,6 @@ import CCH.exception.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Classe principal da aplicação Car Configurator Hub.
@@ -327,6 +326,40 @@ public class CCH {
 	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
 		gestaoDeConfiguracao.criarEncomenda(configuracao, nomeCliente, numeroDeIdentificacaoCliente, moradaCliente,
 											  paisCliente, emailCliente);
+	}
+
+	/**
+	 * Devolve a próxima encomenda que está pronta a ser produzida (existindo
+	 * em stock todos os componentes necessários para a produção da encomenda).
+	 *
+	 * @return Encomenda pronta a produzir
+	 * @throws SemEncomendasDisponiveisException Caso não exista nenhuma encomenda disponível,
+	 * por exemplo, se simplesmente não existir nenhuma encomenda para produzir ou
+	 * se não houver em stock algum dos componentes necessários para a encomenda
+	 */
+	public Encomenda consultarProximaEncomenda() throws SemEncomendasDisponiveisException {
+		return operacaoFabril.consultarProximaEncomenda();
+	}
+
+	/**
+	 * Método que remove uma encomenda (incluindo da base de dados).
+	 *
+	 * @param id Id da encomenda que se pretende remover
+	 */
+	public void removerEncomenda(Integer id) {
+		operacaoFabril.removerEncomenda(id);
+	}
+
+	/**
+	 * Atualiza o stock de um determinado componente (incluindo na base de dados),
+	 * por exemplo, caso algum componente se parta ou esteja esquecido na Fábrica.
+	 *
+	 * @param componente Objeto componente já com as informações novas
+	 * @throws SemEncomendasDisponiveisException Caso esta atualização não altere
+	 * as encomendas disponíveis a produzir.
+	 */
+	public Encomenda atualizarStock(Componente componente) throws SemEncomendasDisponiveisException, StockInvalidoException {
+		return operacaoFabril.atualizarStock(componente);
 	}
 }
 
