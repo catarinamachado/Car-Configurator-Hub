@@ -1,9 +1,9 @@
 package CCH.controller.operacaoFabril;
 
 import CCH.CarConfiguratorHubApplication;
+import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Encomenda;
-import CCH.business.OperacaoFabril;
 import CCH.exception.SemEncomendasDisponiveisException;
 import CCH.exception.StockInvalidoException;
 import javafx.collections.FXCollections;
@@ -28,12 +28,12 @@ public class IndexController {
     @FXML
     public Button back;
 
-    private OperacaoFabril operacaoFabril = CarConfiguratorHubApplication.getCch().getOperacaoFabril();
+    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void initialize() {
         try {
-            Encomenda encomenda = operacaoFabril.consultarProximaEncomenda();
+            Encomenda encomenda = cch.consultarProximaEncomenda();
             idEncomenda.setText(Integer.toString(encomenda.getId()));
         } catch (SemEncomendasDisponiveisException e) {
             idEncomenda.setText("Nenhuma encomenda disponível");
@@ -71,7 +71,7 @@ public class IndexController {
 
     private ObservableList<Componente> getComponentes() {
         ObservableList<Componente> componentesList = FXCollections.observableArrayList();
-        componentesList.addAll(operacaoFabril.consultarComponentes());
+        componentesList.addAll(cch.consultarComponentes());
 
         return componentesList;
     }
@@ -80,11 +80,11 @@ public class IndexController {
     public void concluir() {
         try {
             int encomendaId = Integer.parseInt(idEncomenda.getText());
-            operacaoFabril.removerEncomenda(encomendaId);
+            cch.removerEncomenda(encomendaId);
         } catch (Exception e) {}
 
         try {
-            Encomenda encomenda = operacaoFabril.consultarProximaEncomenda();
+            Encomenda encomenda = cch.consultarProximaEncomenda();
             idEncomenda.setText(Integer.toString(encomenda.getId()));
         } catch (SemEncomendasDisponiveisException e) {
             idEncomenda.setText("Nenhuma encomenda disponível");
@@ -99,7 +99,7 @@ public class IndexController {
             componente.setStock(Integer.parseInt(event.getNewValue()));
 
             try {
-                Encomenda encomenda = operacaoFabril.atualizarStock(componente);
+                Encomenda encomenda = cch.atualizarStock(componente);
                 idEncomenda.setText(Integer.toString(encomenda.getId()));
             } catch (StockInvalidoException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -108,6 +108,7 @@ public class IndexController {
                 alert.setContentText("O stock inserido não pode ser menor do que 0.");
 
                 alert.showAndWait();
+                table.setItems(getComponentes());
             } catch (SemEncomendasDisponiveisException e) {
                 idEncomenda.setText("Nenhuma encomenda disponível");
             }

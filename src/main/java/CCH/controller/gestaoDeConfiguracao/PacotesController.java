@@ -27,10 +27,10 @@ public class PacotesController {
 
     @FXML public Button back;
 
-    private static Configuracao configuracao;
-    public static void setConfiguracao(Configuracao newConfiguracao) {
+    //private static Configuracao configuracao;
+    /*public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
-    }
+    }*/
 
     private CCH cch = CarConfiguratorHubApplication.getCch();
 
@@ -118,8 +118,8 @@ public class PacotesController {
                     if (event.getClickCount() == 2 && (!row.isEmpty())) {
                         novoPacote = row.getItem();
 
-                        List<Componente> incompativeis = configuracao.componentesIncompativeisNaConfig(novoPacote.getComponentes());
-                        List<Componente> requeridos = configuracao.componentesRequeridosQueNaoEstaoConfig(novoPacote.getComponentes());
+                        List<Componente> incompativeis = cch.componentesIncompativeisNaConfig(novoPacote.getComponentes());
+                        List<Componente> requeridos = cch.componentesRequeridosQueNaoEstaoConfig(novoPacote.getComponentes());
                         boolean flag = true;
 
                         if (incompativeis.size() != 0) {
@@ -130,7 +130,7 @@ public class PacotesController {
                             flag = temProblemas("r", requeridos);
 
                         if (flag) {
-                            pacote = configuracao.adicionarPacote(novoPacote.getId(), null);
+                            pacote = cch.adicionarPacote(novoPacote.getId(), null);
                         }
 
                         if (pacote != null) {
@@ -141,7 +141,7 @@ public class PacotesController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK){
-                                configuracao.adicionarPacote(novoPacote.getId(), pacote);
+                                cch.adicionarPacote(novoPacote.getId(), pacote);
                             }
                         }
 

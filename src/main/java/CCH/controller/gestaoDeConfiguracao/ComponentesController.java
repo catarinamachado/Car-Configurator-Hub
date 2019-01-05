@@ -25,12 +25,12 @@ public class ComponentesController {
     @FXML
     public Button back;
 
+    private CCH cch = CarConfiguratorHubApplication.getCch();
+
     private static Configuracao configuracao;
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
-
-    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void initialize() {
@@ -71,8 +71,8 @@ public class ComponentesController {
                         Map<Integer,Componente> comps = new HashMap<>();
                         comps.put(novoComponente.getId(), novoComponente);
 
-                        List<Componente> incompativeis = configuracao.componentesIncompativeisNaConfig(comps);
-                        List<Componente> requeridos = configuracao.componentesRequeridosQueNaoEstaoConfig(comps);
+                        List<Componente> incompativeis = cch.componentesIncompativeisNaConfig(comps);
+                        List<Componente> requeridos = cch.componentesRequeridosQueNaoEstaoConfig(comps);
                         boolean flag = true;
                         boolean adquiriu = true;
 
@@ -84,8 +84,8 @@ public class ComponentesController {
                             flag = temProblemas("r", requeridos);
 
                         if (flag) {
-                            configuracao.adicionarComponente(novoComponente.getId());
-                            adquiriu = configuracao.checkforPacotesInConfiguration();
+                            cch.adicionarComponente(novoComponente.getId());
+                            adquiriu = cch.checkforPacotesInConfiguration();
                         }
 
                         if (adquiriu) {

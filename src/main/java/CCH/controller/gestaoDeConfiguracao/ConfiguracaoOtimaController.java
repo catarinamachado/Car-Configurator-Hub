@@ -31,15 +31,16 @@ public class ConfiguracaoOtimaController {
     @FXML
     public TableView tablepacs;
 
-    private static Configuracao configuracao;
+    //private static Configuracao configuracao;
     private Configuracao configuracaoGerada;
-
+    private CCH cch = CarConfiguratorHubApplication.getCch();
+    private boolean accepted = false;
+/*
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
 
-    private CCH cch = CarConfiguratorHubApplication.getCch();
-    private GestaoDeConfiguracao gestaoDeConfiguracao = CarConfiguratorHubApplication.getCch().getGestaoDeConfiguracao();
+*/
 
     @FXML
     public void initialize() {
@@ -151,7 +152,7 @@ public class ConfiguracaoOtimaController {
         }
 
         try {
-            configuracaoGerada = cch.ConfiguracaoOtima(configuracao, valorMaximo);
+            configuracaoGerada = cch.ConfiguracaoOtima(valorMaximo);
             componentes.addAll(configuracaoGerada.componentesNotInPacotes().values());
             pacotes.addAll(configuracaoGerada.consultarPacotes().values());
         } catch (NoOptimalConfigurationException e) {
@@ -174,8 +175,8 @@ public class ConfiguracaoOtimaController {
 
     @FXML
     public void aplicar() {
-        gestaoDeConfiguracao.removerConfiguracao(configuracao.getId());
-
+        cch.removerConfiguracao(cch.getConfigAtual().getId());
+        accepted = true;
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informação");
         alert.setHeaderText("Configuração aplicada com sucesso!");
@@ -185,6 +186,8 @@ public class ConfiguracaoOtimaController {
 
     @FXML
     public void back() {
+        if (configuracaoGerada != null && !accepted)
+            cch.removerConfiguracao(configuracaoGerada.getId());
         ((Stage) back.getScene().getWindow()).close();
     }
 }

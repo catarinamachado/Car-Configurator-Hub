@@ -1,8 +1,8 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
+import CCH.business.CCH;
 import CCH.business.Configuracao;
-import CCH.business.GestaoDeConfiguracao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +24,7 @@ public class ConfiguracoesController {
     @FXML
     public Button back;
 
-    private GestaoDeConfiguracao gestaoDeConfiguracao = CarConfiguratorHubApplication.getCch().getGestaoDeConfiguracao();
+    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void initialize() {
@@ -74,7 +74,7 @@ public class ConfiguracoesController {
 
     private ObservableList<Configuracao> getConfiguracoes() {
         ObservableList<Configuracao> configuracoes = FXCollections.observableArrayList();
-        configuracoes.addAll(gestaoDeConfiguracao.consultarConfiguracoes());
+        configuracoes.addAll(cch.consultarConfiguracoes());
         return configuracoes;
     }
 
@@ -96,7 +96,7 @@ public class ConfiguracoesController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK){
-                                gestaoDeConfiguracao.removerConfiguracao(configuracao.getId());
+                                cch.removerConfiguracao(configuracao.getId());
                                 table.setItems(getConfiguracoes());
                                 table.refresh();
                             }
@@ -122,7 +122,7 @@ public class ConfiguracoesController {
 
     @FXML
     public void add() {
-        gestaoDeConfiguracao.criarConfiguracao();
+        cch.criarConfiguracao();
         table.setItems(getConfiguracoes());
         table.refresh();
     }
