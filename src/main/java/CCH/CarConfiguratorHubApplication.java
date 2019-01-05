@@ -62,4 +62,3 @@ public class CarConfiguratorHubApplication extends Application {
 		context.close();
 	}
 }
-

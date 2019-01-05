@@ -2,7 +2,6 @@ package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
 import CCH.business.Configuracao;
-import CCH.business.Encomenda;
 import CCH.business.GestaoDeConfiguracao;
 import CCH.exception.EncomendaRequerObrigatoriosException;
 import CCH.exception.EncomendaRequerOutrosComponentes;

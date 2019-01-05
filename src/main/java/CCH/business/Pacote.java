@@ -1,9 +1,12 @@
 package CCH.business;
 
 import CCH.dataaccess.PacoteDAO;
+import CCH.dataaccess.RemoteClass;
 import CCH.exception.ComponenteIncompativelNoPacoteException;
 import CCH.exception.ComponenteJaExisteNoPacoteException;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,19 +14,20 @@ import java.util.Map;
  *
  * @version 20181229
  */
-
-public class Pacote {
+public class Pacote implements RemoteClass<Integer> {
 	private int id;
 	private double desconto;
-	private PacoteDAO pacoteDAO = new PacoteDAO();
+	private PacoteDAO pacoteDAO;
 
 	/**
 	 * Construtor por omissão do Pacote.
 	 */
+   
 	public Pacote() {
-		this.id = pacoteDAO.getNextId();
+		this.id = 0;
 		this.desconto = 0.0;
 	}
+
 
 	/**
 	 * Construtor parametrizado do Pacote.
@@ -32,10 +36,11 @@ public class Pacote {
 	 * @param desconto Desconto associado ao pacote
 	 */
 	public Pacote(int id, double desconto) {
+		this.pacoteDAO = new PacoteDAO();
 		this.id = id;
 		this.desconto = desconto;
 	}
-
+  
 	/**
 	 * Devolve o id do pacote.
 	 *
@@ -43,6 +48,26 @@ public class Pacote {
 	 */
 	public int getId() {
 		return this.id;
+	}
+
+
+	public Integer key(){return this.id; }
+
+    public Integer key(String k) {
+        return Integer.valueOf(k);
+    }
+
+	@Override
+	public Pacote fromRow(List<String> row) {
+		return new Pacote(row);
+	}
+
+	@Override
+	public List<String> toRow() {
+		List<String> l = new LinkedList<>();
+		l.add(String.valueOf(this.id));
+		l.add(String.valueOf(this.desconto));
+		return l;
 	}
 
 	/**
@@ -82,6 +107,13 @@ public class Pacote {
 		return pacoteDAO.getComponentes(id);
 	}
 
+
+	public Pacote(List<String> rs){
+		this.id = Integer.valueOf(rs.get(0));
+		this.desconto = Double.valueOf(rs.get(1));
+		this.pacoteDAO = new PacoteDAO();
+	}
+
 	/**
 	 * Método que adiciona um novo componente ao pacote.
 	 *
@@ -91,6 +123,7 @@ public class Pacote {
 	 * @throws ComponenteIncompativelNoPacoteException Caso exista algum componente
 	 * no pacote que seja incompatível com o componente que se pretende adicionar
 	 */
+
 	public void adicionaComponente(int componenteId) throws ComponenteJaExisteNoPacoteException,
 															ComponenteIncompativelNoPacoteException {
 		boolean alreadyHas = pacoteDAO.getAllIdsComponentesNoPacote(this.id).contains(componenteId);
@@ -140,5 +173,13 @@ public class Pacote {
 	 */
 	public void atualizarDesconto(Pacote pacote) {
 		pacoteDAO.updateDesconto(pacote);
+	}
+
+	@Override
+	public String toString() {
+		return "Pacote{" +
+				"id=" + id +
+				", desconto=" + desconto +
+				'}';
 	}
 }

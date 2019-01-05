@@ -1,8 +1,14 @@
 package CCH.business;
 
+import CCH.dataaccess.ClasseComponenteDAO;
 import CCH.dataaccess.ComponenteDAO;
+import CCH.dataaccess.RemoteClass;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+public class Componente implements RemoteClass<Integer> {
 
 /**
  * Classe que representa um componente e todas as informações inerentes ao mesmo.
@@ -10,14 +16,17 @@ import java.util.Map;
  * @version 20181229
  */
 
-public class Componente {
 	private ClasseComponente classeComponente;
 	private int id;
 	private int stock;
 	private double preco;
 	private String nome;
 
-	private ComponenteDAO componenteDAO = new ComponenteDAO();
+	private ComponenteDAO componenteDAO = null;
+	private ClasseComponenteDAO classeComponenteDAO = null;
+
+	public Componente() {
+	}
 
 	/**
 	 * Construtor parametrizado do Componente.
@@ -34,22 +43,61 @@ public class Componente {
 		this.preco = preco;
 		this.nome = nome;
 		this.classeComponente = classeComponente;
+		this.componenteDAO = new ComponenteDAO();
+		this.classeComponenteDAO = new ClasseComponenteDAO();
 	}
+
+	public Componente(List<String> rs){
+	    this.id = Integer.valueOf(rs.get(0));
+	    this.stock = Integer.valueOf(rs.get(1));
+	    this.preco = Double.valueOf(rs.get(2));
+	    this.nome = rs.get(3);
+		  this.componenteDAO = new ComponenteDAO();
+		  this.classeComponenteDAO = new ClasseComponenteDAO();
+	    this.classeComponente = this.classeComponenteDAO.get(Integer.valueOf(rs.get(4)));
+    }
+
 
 	/**
 	 * Devolve o id do componente.
 	 *
 	 * @return id
 	 */
+
 	public int getId() {
 		return this.id;
 	}
+
+	@Override
+	public List<String> toRow() {
+		List<String> l = new LinkedList<>();
+		l.add(String.valueOf(this.id));
+		l.add(String.valueOf(this.stock));
+		l.add(String.valueOf(this.preco));
+		l.add(this.nome);
+		l.add(String.valueOf(this.classeComponente.key()));
+		return l;
+	}
+
+	public Componente fromRow(List<String> rs){
+		return new Componente(rs);
+	}
+
+	public Integer key() {
+		return this.id;
+	}
+
+    public Integer key(String k) {
+        return Integer.valueOf(k);
+    }
+
 
 	/**
 	 * Atualiza o id do componente.
 	 *
 	 * @param id Id do componente
 	 */
+
 	public void setId(int id) {
 		this.id = id;
 	}

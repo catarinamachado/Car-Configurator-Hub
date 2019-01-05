@@ -1,12 +1,12 @@
 package CCH.business;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.HashMap;
-import java.util.ArrayList;
-
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Classe que gera uma configuração ótima para um determinado valor máximo.
@@ -169,7 +169,7 @@ public class ConfiguracaoOtima {
                     componentesAceitados.add(c);
             }
             Configuracao otima = new Configuracao(pacotesAceitados,componentesAceitados);
-            
+
             return otima;
         }
         else throw new IloException();

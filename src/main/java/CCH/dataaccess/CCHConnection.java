@@ -13,9 +13,7 @@ public class CCHConnection {
             Class.forName(driver);
             connection = DriverManager.getConnection(url + "?user=" + user + "&password=" + password);
         }
-        catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+        catch (ClassNotFoundException | SQLException e) { }
     }
 
     public static Connection getConnection() {

@@ -30,4 +30,12 @@ public enum TipoUtilizador {
 	public int getValue() {
 		return value;
 	}
+
+	public static TipoUtilizador withValue(int value) {
+		return TipoUtilizador.values()[value];
+	}
+
 }
+
+
+

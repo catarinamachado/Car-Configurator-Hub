@@ -1,4 +1,9 @@
 package CCH.business;
+import CCH.dataaccess.RemoteClass;
+
+import java.util.LinkedList;
+import java.util.List;
+
 
 /**
  * ClasseComponente simboliza as características básicas do componente, como
@@ -7,11 +12,12 @@ package CCH.business;
  * @version 20181229
  */
 
-public class ClasseComponente {
+public class ClasseComponente implements RemoteClass<Integer> {
 	private TipoComponente tipoComponente;
 	private int id;
 	private boolean eObrigatorio;
 	private String nome;
+
 
 	/**
 	 * Construtor parametrizado da ClasseComponente.
@@ -27,6 +33,14 @@ public class ClasseComponente {
 		this.nome = nome;
 		this.tipoComponente = tipoComponente;
 	}
+  
+  public ClasseComponente(List<String> rs){
+		this.id = Integer.valueOf(rs.get(0));
+		this.eObrigatorio = Boolean.valueOf(rs.get(1));
+		this.nome= rs.get(2);
+		this.tipoComponente = TipoComponente.withValue(Integer.valueOf(rs.get(3)));
+	}
+    
 
 	/**
 	 * Devolve o id da classe do componente.
@@ -35,6 +49,28 @@ public class ClasseComponente {
 	 */
 	public int getId() {
 		return this.id;
+	}
+
+
+	public Integer key(){return this.id; }
+
+    public Integer key(String k) {
+        return Integer.valueOf(k);
+    }
+
+	@Override
+	public ClasseComponente fromRow(List<String> row) {
+		return new ClasseComponente(row);
+	}
+
+	@Override
+	public List<String> toRow() {
+		List<String> l = new LinkedList<String>();
+		l.add(String.valueOf(this.id));
+		l.add(String.valueOf(this.eObrigatorio));
+		l.add(this.nome);
+		l.add(String.valueOf(this.tipoComponente.getValue()));
+		return l;
 	}
 
 	/**

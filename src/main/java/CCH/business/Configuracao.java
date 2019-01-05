@@ -3,20 +3,12 @@ package CCH.business;
 import CCH.dataaccess.ClasseComponenteDAO;
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.PacoteDAO;
-import CCH.exception.ComponenteJaAdicionadoException;
-import CCH.exception.PacoteJaAdicionadoException;
-import CCH.exception.EncomendaTemComponentesIncompativeis;
-import CCH.exception.EncomendaRequerOutrosComponentes;
-import CCH.exception.EncomendaRequerObrigatoriosException;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import CCH.dataaccess.RemoteClass;
+import CCH.exception.*;
 import ilog.concert.IloException;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Classe que caracteriza uma configuração, com todas as informações da mesma.
@@ -24,21 +16,27 @@ import ilog.concert.IloException;
  * @version 20181229
  */
 
-public class Configuracao {
+public class Configuracao implements RemoteClass<Integer> {
 	private int id;
 	private double preco;
 	private double desconto;
 
-	private PacoteDAO pacoteDAO = new PacoteDAO();
-	private ConfiguracaoDAO configuracaoDAO = new ConfiguracaoDAO();
+	private PacoteDAO pacoteDAO;
+	private ConfiguracaoDAO configuracaoDAO;
 
     /**
      * Construtor por omissão da Configuração.
      */
     public Configuracao() {
-        this.id = configuracaoDAO.getNextId();
+        this.id = 0;
         this.preco = 0;
         this.desconto = 0;
+    }
+  
+  	public Configuracao(List<String> rs){
+	    this.id =Integer.valueOf(rs.get(0));
+	    this.preco=Double.valueOf(rs.get(1));
+	    this.desconto=Double.valueOf(rs.get(2));
     }
 
     /**
@@ -84,6 +82,25 @@ public class Configuracao {
 	public int getId() {
 		return this.id;
 	}
+  
+	public Integer key(){return this.id; }
+
+    public Integer key(String k) {
+        return Integer.valueOf(k);
+    }
+
+	@Override
+	public List<String> toRow() {
+		List<String> l = new LinkedList<>();
+		l.add(String.valueOf(this.id));
+        l.add(String.valueOf(this.preco));
+        l.add(String.valueOf(this.desconto));
+        return l;
+	}
+
+	public Configuracao fromRow(List<String> rs){
+	    return new Configuracao(rs);
+    }
 
 
     /**
@@ -100,6 +117,7 @@ public class Configuracao {
      *
      * @return preço
      */
+
 	public double getPreco() {
 		return this.preco;
 	}
@@ -118,6 +136,7 @@ public class Configuracao {
      *
      * @return desconto
      */
+  
 	public double getDesconto() {
 		return this.desconto;
 	}
@@ -145,6 +164,7 @@ public class Configuracao {
      *
      * @return Configuracao
      */
+
 	public Configuracao gerarConfiguracaoOtima(
 			List<Componente> componentesObrigatorios,
 		   	List<Componente> componentes,
@@ -186,10 +206,11 @@ public class Configuracao {
 		Componente componente = configuracaoDAO.removeComponente(id, componenteId);
 
 		this.preco -= componente.getPreco();
-		for (Pacote pacote : configuracaoDAO.getPacotes(id).values()) {
+		for (RemoteClass<Integer> pac : configuracaoDAO.getPacotes(id).values()) {
+			Pacote pacote = (Pacote)pac;
 			if (pacote.getComponentes().containsKey(componenteId)) {
 				this.desconto -= pacote.getDesconto();
-				configuracaoDAO.removePacote(id, pacote.getId());
+				configuracaoDAO.removePacote(this.id, pacote.getId());
 			}
 		}
 
@@ -245,7 +266,7 @@ public class Configuracao {
 			}
 		});
 
-		configuracaoDAO.put(id, this);
+		configuracaoDAO.update(id, this);
 
 		return null;
 	}
@@ -333,22 +354,22 @@ public class Configuracao {
 	 * incompatíveis
 	 */
 	private void temIncompativeis(Map<Integer, Componente> componentes) throws EncomendaTemComponentesIncompativeis {
-		Map<Integer, Componente> incompativeis = new HashMap<>();
+        Map<Integer, Componente> incompativeis = new HashMap<>();
 
-		componentes.forEach((k,c) ->
-				incompativeis.putAll(
-						c.getIncompativeis()
-				)
-		);
+        componentes.forEach((k, c) ->
+                incompativeis.putAll(
+                        c.getIncompativeis()
+                )
+        );
 
-		for (Componente componente : componentes.values()) {
-			if (incompativeis.containsKey(componente.getId())) {
-				throw new EncomendaTemComponentesIncompativeis(
-						componente.getFullName() + " é incompatível com outros componentes."
-				);
-			}
-		}
-	}
+        for (Componente componente : componentes.values()) {
+            if (incompativeis.containsKey(componente.getId())) {
+                throw new EncomendaTemComponentesIncompativeis(
+                        componente.getFullName() + " é incompatível com outros componentes."
+                );
+            }
+        }
+    }
 
 	/**
 	 * Verifica se estão presentes na configuração todos os componentes
@@ -379,7 +400,7 @@ public class Configuracao {
 	 * Devolve a lista dos componentes presentes na configuração que são
 	 * incompatíveis com o componente passado como parâmetro.
 	 *
-	 * @param componente Componente que se pretende analisar
+	 * @param componentes Componente que se pretende analisar
 	 */
 	public List<Componente> componentesIncompativeisNaConfig(Map<Integer,Componente> componentes) {
 		List<Componente> incompativeis = new ArrayList<>();
@@ -398,7 +419,7 @@ public class Configuracao {
 	 * Devolve a lista dos componentes que ainda não estão na configuração
 	 * mas que o componente passado como parâmetro também requer.
 	 *
-	 * @param componente Componente que se pretende analisar
+	 * @param componentes Componente que se pretende analisar
 	 */
 	public List<Componente> componentesRequeridosQueNaoEstaoConfig(Map<Integer,Componente> componentes) {
 		List<Componente> requeridos = new ArrayList<>();
@@ -413,7 +434,7 @@ public class Configuracao {
 
 		return requeridos;
 	}
-
+  
   /**
 	 * Devolve a lista dos componentes que estão na configuração que requerem
    * o componente passado como parâmetro.
@@ -431,16 +452,16 @@ public class Configuracao {
 		return requeridos;
 	}
 
-	/**
+  /**
 	 * Averigua se os componentes presentes na configuração constituem um
 	 * pacote. Em caso afirmativo, substitui os componentes isolados pelo
 	 * pacote.
 	 */
-	public boolean checkforPacotesInConfiguration() {
-		Collection<Pacote> pacotes = this.pacoteDAO.values();
+	public boolean checkforPacotesInConfiguration(){
+		Collection<RemoteClass<Integer>> pacotes = this.pacoteDAO.values();
 		Map<Integer,Componente> compsNotInPacotes = this.componentesNotInPacotes();
-		
-    for (Pacote p : pacotes) {
+		for (RemoteClass r:pacotes) {
+			Pacote p = (Pacote)r;
 			Collection<Componente> comps = p.getComponentes().values();
 			boolean containsPacote = true;
 			for (Componente c : comps) {
@@ -469,8 +490,8 @@ public class Configuracao {
 	 * @return Map<Integer, Componente> componentes
 	 */
 	public Map<Integer, Componente> componentesNotInPacotes() {
-		Map<Integer,Componente> componentes = this.consultarComponentes();
-		Map<Integer,Pacote> pacotes = this.consultarPacotes();
+		Map<Integer, Componente> componentes = this.consultarComponentes();
+		Map<Integer, Pacote> pacotes = this.consultarPacotes();
 
 		for (Pacote p : pacotes.values()) {
 			for (Componente c : p.getComponentes().values()) {
@@ -489,12 +510,11 @@ public class Configuracao {
      */
 	public boolean temComponentesObrigatorios() {
 		ClasseComponenteDAO cdao = new ClasseComponenteDAO();
-		List<Integer> idsTiposObrigatorios =
-                cdao.values().stream().
-                        filter(p -> p.getEObrigatorio()).map(p -> p.getId()).collect(Collectors.toList());
-		Collection<Integer> idsTiposNaClasse =
-                this.consultarComponentes().values().stream().
-                        map(c -> c.getClasseComponente().getId()).collect(Collectors.toSet());
+		List<Integer> idsTiposObrigatorios = cdao.values().stream().map(p -> (ClasseComponente)p).
+				filter(ClasseComponente :: getEObrigatorio).
+				map(ClasseComponente:: getId).collect(Collectors.toList());
+		Collection<Integer> idsTiposNaClasse = this.consultarComponentes().values().stream().
+				map(c -> c.getClasseComponente().getId()).collect(Collectors.toSet());
 
 		return idsTiposNaClasse.containsAll(idsTiposObrigatorios);
 	}

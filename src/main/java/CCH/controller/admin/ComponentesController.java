@@ -1,27 +1,23 @@
 package CCH.controller.admin;
 
+import CCH.CarConfiguratorHubApplication;
 import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Pacote;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import CCH.CarConfiguratorHubApplication;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.Optional;
-import javafx.stage.Stage;
 
 public class ComponentesController {
     @FXML

@@ -50,7 +50,6 @@ public class LoginController {
             }
 
         } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");

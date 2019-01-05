@@ -4,7 +4,6 @@ import CCH.CarConfiguratorHubApplication;
 import CCH.business.CCH;
 import CCH.business.Utilizador;
 import CCH.exception.TipoUtilizadorInexistenteException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
 import java.util.Optional;
 

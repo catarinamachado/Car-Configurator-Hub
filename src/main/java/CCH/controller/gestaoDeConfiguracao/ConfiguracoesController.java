@@ -66,9 +66,7 @@ public class ConfiguracoesController {
                         stage.showAndWait();
                         initialize();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { }
             });
             return row;
         });

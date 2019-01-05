@@ -1,21 +1,32 @@
 package CCH.business;
 
+import CCH.dataaccess.RemoteClass;
 import CCH.dataaccess.UtilizadorDAO;
 import CCH.exception.TipoUtilizadorInexistenteException;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Classe utilizador, que representa o ator que interage com a aplicação.
  *
  * @version 20181229
  */
-
-public class Utilizador {
-	private TipoUtilizador tipoUtilizador;
+public class Utilizador implements RemoteClass<Integer> {
+/**
+ * Classe utilizador, que representa o ator que interage com a aplicação.
+ *
+ * @version 20181229
+ */
 	private int id;
 	private String nome;
 	private String password;
+	private TipoUtilizador tipoUtilizador;
 
-	private UtilizadorDAO utilizadorDAO = new UtilizadorDAO();
+	private UtilizadorDAO utilizadorDAO;
+
+	public Utilizador() {
+	}
 
 	/**
 	 * Construtor parametrizado da Utilizador.
@@ -24,6 +35,7 @@ public class Utilizador {
 	 * @param password Password do utilizador
 	 */
 	public Utilizador(String nome, String password) {
+		this.utilizadorDAO = new UtilizadorDAO();
 		this.id = utilizadorDAO.getNextId();
 		this.nome = nome;
 		this.password = password;
@@ -43,6 +55,15 @@ public class Utilizador {
 		this.nome = nome;
 		this.password = password;
 		this.tipoUtilizador = tipoUtilizador;
+		this.utilizadorDAO = new UtilizadorDAO();
+	}
+
+	public Utilizador(List<String> rs) {
+		this.id = Integer.valueOf(rs.get(0));
+		this.nome = rs.get(1);
+		this.password = rs.get(2);
+		this.tipoUtilizador = TipoUtilizador.withValue(Integer.valueOf(rs.get(3)));
+		this.utilizadorDAO = new UtilizadorDAO();
 	}
 
 	/**
@@ -54,6 +75,28 @@ public class Utilizador {
 		return this.id;
 	}
 
+  public Integer key(String k) {
+    return Integer.valueOf(k);
+  }
+
+	public Integer key(){ return this.id; }
+	
+
+	@Override
+	public List<String> toRow() {
+		List<String> l = new LinkedList<>();
+		l.add(String.valueOf(this.id));
+		l.add(this.nome);
+		l.add(this.password);
+		l.add(String.valueOf(this.tipoUtilizador.getValue()));
+		return l;
+	}
+
+	@Override
+	public Utilizador fromRow(List<String> row) {
+		return new Utilizador(row);
+	}
+
 	/**
 	 * Atualiza o id do utilizador.
 	 *
@@ -61,6 +104,7 @@ public class Utilizador {
 	 */
 	public void setId(int id) {
 		this.id = id;
+
 	}
 
 	/**
@@ -69,7 +113,7 @@ public class Utilizador {
 	 * @return nome
 	 */
 	public String getNome() {
-		return this.nome;
+		return nome;
 	}
 
 	/**
@@ -87,7 +131,7 @@ public class Utilizador {
 	 * @return password
 	 */
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	/**
@@ -123,6 +167,7 @@ public class Utilizador {
 	 *
 	 * @param value Valor inteiro correspondente ao tipo de utilizador
 	 */
+
 	public void setTipoUtilizadorValue(int value) {
 		TipoUtilizador tipoUtilizador = TipoUtilizador.values()[value];
 
@@ -211,4 +256,5 @@ public class Utilizador {
 	public void atualizarTipo(Utilizador utilizador) {
 		utilizadorDAO.updateTipo(utilizador);
 	}
+
 }

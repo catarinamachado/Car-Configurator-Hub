@@ -6,13 +6,12 @@ import CCH.business.Encomenda;
 import CCH.business.OperacaoFabril;
 import CCH.exception.SemEncomendasDisponiveisException;
 import CCH.exception.StockInvalidoException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.*;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;

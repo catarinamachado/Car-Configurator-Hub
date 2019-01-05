@@ -1,95 +1,36 @@
 package CCH.dataaccess;
 
-import CCH.business.ClasseComponente;
 import CCH.business.Componente;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Set;
-import java.util.HashSet;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.*;
 
-public class ComponenteDAO implements Map<Integer, Componente> {
-
-    public Connection conn;
-
-    private ClasseComponenteDAO classeComponenteDAO = new ClasseComponenteDAO();
+public class ComponenteDAO extends GenericDAOClass<Integer> {
 
     public ComponenteDAO () {
-        conn = CCHConnection.getConnection();
-    }
-
-    public boolean containsKey(Object key) throws NullPointerException {
-        try {
-            Statement stm = conn.createStatement();
-            String sql = "SELECT id FROM Componente WHERE ID = " + key;
-            ResultSet rs = stm.executeQuery(sql);
-            return rs.next();
-        }
-        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+        super("Componente",
+                new Componente(),
+                Arrays.asList(new String[]{"id","stock","preco","nome","ClasseComponente_id"}));
     }
 
     public Componente get(Object key) {
-        try {
-            Componente al = null;
-            Statement stm = conn.createStatement();
-            String sql = "SELECT * FROM Componente WHERE id=" + key;
-            ResultSet rs = stm.executeQuery(sql);
-
-            if (rs.next()) {
-                ClasseComponente classeComponente = classeComponenteDAO.get(rs.getInt(5));
-                al = new Componente(rs.getInt(1),rs.getInt(2),rs.getDouble(3), rs.getString(4), classeComponente);
-            }
-
-            return al;
-        }
-        catch (Exception e) {
-            throw new NullPointerException(e.getMessage());
-        }
+        return (Componente)super.get(key);
     }
 
-    public int size() {
-        try {
-            int i = 0;
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT id FROM Componente");
-
-            while (rs.next()) {
-                i++;
-            }
-
-            return i;
-        }
-        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    public Componente put(Integer key, Componente value){
+        return (Componente)super.put(key,value);
     }
 
-    public Collection<Componente> values() {
-        try {
-            Collection<Componente> col = new HashSet<>();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM Componente");
-
-            while (rs.next()) {
-                ClasseComponente classeComponente = classeComponenteDAO.get(rs.getInt(5));
-                Componente al = new Componente(rs.getInt(1),rs.getInt(2),rs.getDouble(3), rs.getString(4), classeComponente);
-                col.add(al);
-            }
-
-            return col;
-        }
-        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    public Componente remove(Object key){
+        return (Componente)super.remove(key);
     }
 
-    public Map<Integer, Componente> getAll() {
-        Map<Integer, Componente> hashmap = new HashMap<>();
-        Collection<Componente> collection = values();
-
-        collection.forEach(u -> hashmap.put(u.getId(), u));
-
-        return hashmap;
+    public Map<Integer,Componente> getAllComponente() {
+        Map<Integer, RemoteClass<Integer>> a = super.getAll();
+        Map<Integer, Componente> r = new HashMap<>();
+        a.forEach((k,v) -> r.put(k, (Componente) v));
+        return r;
     }
 
     public Map<Integer, Componente> getComponentesIncompativeis(Integer componenteId) {
@@ -97,21 +38,24 @@ public class ComponenteDAO implements Map<Integer, Componente> {
             Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
 
-            String sql = "SELECT * FROM Componente_incompativel_Componente WHERE " +
-                    "Componente_id=" + componenteId + " OR " +
-                    "Componente_id1=" + componenteId + ";";
+            String sql = "SELECT C.* FROM Componente_incompativel_Componente as CC, Componente as C WHERE " +
+                    "(CC.Componente_id=" + componenteId + " and C.id = CC.Componente_id1) OR " +
+                    "(CC.Componente_id = C.id and CC.Componente_id1=" + componenteId + ");";
 
             ResultSet rs = stm.executeQuery(sql);
 
+            List<String> row;
+            int col = rs.getMetaData().getColumnCount();
+            Componente token = new Componente();
+
             while (rs.next()) {
-                Componente componente;
 
-                if (rs.getInt(1) == componenteId)
-                    componente = get(rs.getInt(2));
-                else
-                    componente = get(rs.getInt(1));
+                row = new ArrayList<>();
+                for( int i = 1; i<= col; i++)
+                    row.add(rs.getString(i));
 
-                componentes.put(componente.getId(), componente);
+                Componente n = token.fromRow(row);
+                componentes.put(n.key(),n);
             }
 
             return componentes;
@@ -121,16 +65,27 @@ public class ComponenteDAO implements Map<Integer, Componente> {
         }
     }
 
+
     public Map<Integer, Componente> getComponentesRequeridos(Integer componenteId) {
         try {
             Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
-            String sql = "SELECT * FROM Componente_requer_Componente WHERE Componente_id=" + componenteId;
+            String sql = "SELECT C.* FROM Componente_requer_Componente as CC," +
+                    " Componente as C WHERE CC.Componente_id=" + componenteId + " and CC.Componente_id1 = C.id ;";
             ResultSet rs = stm.executeQuery(sql);
 
+            List<String> row;
+            int col = rs.getMetaData().getColumnCount();
+            Componente token = new Componente();
+
             while (rs.next()) {
-                Componente componente = get(rs.getInt(2));
-                componentes.put(componente.getId(), componente);
+
+                row = new ArrayList<>();
+                for( int i = 1; i<= col; i++)
+                    row.add(rs.getString(i));
+
+                Componente n = token.fromRow(row);
+                componentes.put(n.key(),n);
             }
 
             return componentes;
@@ -155,44 +110,4 @@ public class ComponenteDAO implements Map<Integer, Componente> {
         }
     }
 
-    public Componente put(Integer key, Componente value) {
-        throw new NullPointerException("Not implemented!");
-
-    }
-
-    public Componente remove(Object key) {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public int hashCode() {
-        return this.conn.hashCode();
-    }
-
-    public boolean containsValue(Object value) {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public Set<Entry<Integer, Componente>> entrySet() {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public boolean equals(Object o) {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public void putAll(Map<? extends Integer,? extends Componente> t) {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public void clear () {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public boolean isEmpty() {
-        throw new NullPointerException("Not implemented!");
-    }
-
-    public Set<Integer> keySet() {
-        throw new NullPointerException("Not implemented!");
-    }
 }

@@ -1,22 +1,21 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
-
 import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Configuracao;
 import CCH.exception.ComponenteJaAdicionadoException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import java.lang.StringBuilder;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 public class ComponentesController {
@@ -107,9 +106,7 @@ public class ComponentesController {
                     alert.setContentText("Esta configuração já contém o " + novoComponente.getFullName() + ".");
 
                     alert.showAndWait();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { }
             });
             return row;
         });
