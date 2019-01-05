@@ -21,18 +21,20 @@ public class EncomendaController {
     @FXML public TextField pais;
     @FXML public TextField email;
 
-    private static Configuracao configuracao;
+    /*//private static Configuracao configuracao;
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
+    */
 
     private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void criarEncomenda() {
         try {
+            String cname = cch.getConfigAtual().getNome();
+            Double preco = cch.getConfigAtual().getPreco();
             cch.criarEncomenda(
-                    configuracao,
                     nome.getText(),
                     id.getText(),
                     morada.getText(),
@@ -43,7 +45,7 @@ public class EncomendaController {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Sucesso");
             alert.setHeaderText("A Encomenda foi criada com sucesso");
-            alert.setContentText(configuracao.getNome() + ", " + configuracao.getPreco() + "€");
+            alert.setContentText(cname + ", " + preco + "€");
 
             alert.showAndWait();
         } catch (EncomendaRequerOutrosComponentes e) {

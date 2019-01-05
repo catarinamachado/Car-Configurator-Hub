@@ -1,5 +1,6 @@
 package CCH.controller.gestaoDeConfiguracao;
 
+import CCH.business.CCH;
 import CCH.business.Componente;
 import CCH.business.Configuracao;
 import CCH.business.Pacote;
@@ -18,6 +19,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import CCH.CarConfiguratorHubApplication;
 
 public class ConfiguracaoController {
     @FXML
@@ -29,11 +31,13 @@ public class ConfiguracaoController {
     @FXML
     public TableView tablepacs;
 
-    private static Configuracao configuracao;
+    //private static Configuracao configuracao;
 
     public static void setConfiguracao(Configuracao newConfiguracao) {
-        configuracao = newConfiguracao;
+        cch.loadConfigAtual(newConfiguracao.getId());
     }
+
+    private static CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void initialize() {
@@ -77,12 +81,14 @@ public class ConfiguracaoController {
 
     private ObservableList<Pacote> getPacotes() {
         ObservableList<Pacote> pacotes = FXCollections.observableArrayList();
+        Configuracao configuracao = cch.getConfigAtual();
         pacotes.addAll(configuracao.consultarPacotes().values());
         return pacotes;
     }
 
     private ObservableList<Componente> getComponentes() {
         ObservableList<Componente> componentes = FXCollections.observableArrayList();
+        Configuracao configuracao = cch.getConfigAtual();
         componentes.addAll(configuracao.componentesNotInPacotes().values());
         return componentes;
     }
@@ -105,14 +111,14 @@ public class ConfiguracaoController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK) {
-                                List<Componente> requeridos = configuracao.componentesRequeremMeNaConfig(componente.getId());
+                                List<Componente> requeridos = cch.componentesRequeremMeNaConfig(componente.getId());
                                 boolean flag = true;
 
                                 if (requeridos.size() != 0)
                                     flag = temRequeridos(requeridos);
 
                                 if (flag)
-                                    configuracao.removerComponente(componente.getId());
+                                    cch.removerComponente(componente.getId());
 
                                 table.setItems(getComponentes());
                                 table.refresh();
@@ -139,26 +145,26 @@ public class ConfiguracaoController {
 
     @FXML
     public void loadComponentes() throws IOException {
-        ComponentesController.setConfiguracao(configuracao);
+        //ComponentesController.setConfiguracao(configuracao);
         redirectTo("/views/gestaoDeConfiguracao/componentes.fxml");
     }
 
     @FXML
     public void loadPacotes() throws IOException {
-        PacotesController.setConfiguracao(configuracao);
+        //PacotesController.setConfiguracao(configuracao);
         redirectTo("/views/gestaoDeConfiguracao/pacotes.fxml");
     }
 
     @FXML
     public void configOtima() throws IOException {
-        ConfiguracaoOtimaController.setConfiguracao(configuracao);
+        //ConfiguracaoOtimaController.setConfiguracao(configuracao);
         redirectTo("/views/gestaoDeConfiguracao/configuracaootima.fxml");
         back();
     }
 
     @FXML
     public void criarEncomenda() throws IOException {
-        EncomendaController.setConfiguracao(configuracao);
+        //EncomendaController.setConfiguracao(configuracao);
         redirectTo("/views/gestaoDeConfiguracao/encomenda.fxml");
     }
 
@@ -241,7 +247,7 @@ public class ConfiguracaoController {
 
                             Optional<ButtonType> result = alert.showAndWait();
                             if (result.get() == ButtonType.OK) {
-                                configuracao.removerPacote(pacote.getId());
+                                cch.removerPacoteConfig(pacote.getId());
 
                                 table.setItems(getComponentes());
                                 table.refresh();

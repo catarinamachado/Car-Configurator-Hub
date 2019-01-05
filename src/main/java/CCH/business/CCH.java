@@ -8,6 +8,7 @@ import CCH.exception.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe principal da aplicação Car Configurator Hub.
@@ -271,8 +272,6 @@ public class CCH {
 	 * Método que gera uma configuração ótima, ou seja, uma configuração que tenta
 	 * maximizar a utilização do dinheiro previsto.
 	 *
-	 * @param configuracao Configuração com o ponto de partida para se gerar a
-	 * configuração ótima
 	 * @param valor Valor máximo que o cliente está disposto a gastar
 	 * @return Configuracao ótima gerada
 	 * @throws NoOptimalConfigurationException Caso não exista nenhuma configuração
@@ -280,10 +279,10 @@ public class CCH {
 	 * @throws ConfiguracaoNaoTemObrigatoriosException Caso a configuração não
 	 * contenha os componentes básicos (obrigatórios)
 	 */
-	public Configuracao ConfiguracaoOtima(Configuracao configuracao, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
+	public Configuracao ConfiguracaoOtima(double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
 		Collection<Pacote> pacs = pacoteDAO.values();
 		Collection<Componente> comps = componenteDAO.values();
-		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,configuracao,valor);
+		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,valor);
 	}
 
 	/**
@@ -303,7 +302,6 @@ public class CCH {
 	/**
 	 * Método que cria uma nova encomenda no sistema.
 	 *
-	 * @param configuracao Configuração que se pretende encomendar
 	 * @param nomeCliente Nome do cliente a que a encomenda corresponde
 	 * @param numeroDeIdentificacaoCliente Número de Identificação do cliente
 	 * @param moradaCliente Morada do cliente
@@ -317,14 +315,13 @@ public class CCH {
 	 * os componentes obrigatórios
 	 */
 	public void criarEncomenda(
-			Configuracao configuracao,
 			String nomeCliente,
 			String numeroDeIdentificacaoCliente,
 			String moradaCliente,
 			String paisCliente,
 			String emailCliente
 	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
-		gestaoDeConfiguracao.criarEncomenda(configuracao, nomeCliente, numeroDeIdentificacaoCliente, moradaCliente,
+		gestaoDeConfiguracao.criarEncomenda(nomeCliente, numeroDeIdentificacaoCliente, moradaCliente,
 											  paisCliente, emailCliente);
 	}
 
@@ -360,6 +357,46 @@ public class CCH {
 	 */
 	public Encomenda atualizarStock(Componente componente) throws SemEncomendasDisponiveisException, StockInvalidoException {
 		return operacaoFabril.atualizarStock(componente);
+	}
+
+	public boolean checkforPacotesInConfiguration() {
+		return gestaoDeConfiguracao.checkforPacotesInConfiguration();
+	}
+
+	public void adicionarComponente(int id) throws ComponenteJaAdicionadoException{
+		gestaoDeConfiguracao.adicionarComponenten(id);
+	}
+
+	public List<Componente> componentesIncompativeisNaConfig(Map<Integer, Componente> comps) {
+		return this.gestaoDeConfiguracao.componentesIncompativeisNaConfig(comps);
+	}
+
+	public List<Componente> componentesRequeridosQueNaoEstaoConfig(Map<Integer, Componente> comps) {
+		return gestaoDeConfiguracao.componentesRequeridosQueNaoEstaoConfig(comps);
+	}
+
+	public Pacote adicionarPacote(int id, Pacote p) throws PacoteJaAdicionadoException{
+		return gestaoDeConfiguracao.adicionarPacote(id, p);
+	}
+
+	public Configuracao getConfigAtual() {
+		return gestaoDeConfiguracao.getConfigAtual();
+	}
+
+	public List<Componente> componentesRequeremMeNaConfig(int id) {
+		return gestaoDeConfiguracao.componentesRequeremMeNaConfig(id);
+	}
+
+	public void removerComponente(int id) {
+		gestaoDeConfiguracao.removerComponente(id);
+	}
+
+	public void removerPacoteConfig(int id) {
+		gestaoDeConfiguracao.removerPacoteConfig(id);
+	}
+
+	public void loadConfigAtual(int id) {
+		gestaoDeConfiguracao.loadConfigAtual(id);
 	}
 }
 

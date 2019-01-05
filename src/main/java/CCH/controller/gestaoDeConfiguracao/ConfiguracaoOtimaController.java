@@ -35,13 +35,15 @@ public class ConfiguracaoOtimaController {
     @FXML
     public TableView tablepacs;
 
-    private static Configuracao configuracao;
+    //private static Configuracao configuracao;
     private Configuracao configuracaoGerada;
     private CCH cch = CarConfiguratorHubApplication.getCch();
-
+/*
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
+
+*/
 
     @FXML
     public void initialize() {
@@ -153,7 +155,7 @@ public class ConfiguracaoOtimaController {
         }
 
         try {
-            configuracaoGerada = cch.ConfiguracaoOtima(configuracao, valorMaximo);
+            configuracaoGerada = cch.ConfiguracaoOtima(valorMaximo);
             componentes.addAll(configuracaoGerada.componentesNotInPacotes().values());
             pacotes.addAll(configuracaoGerada.consultarPacotes().values());
         } catch (NoOptimalConfigurationException e) {
@@ -176,8 +178,8 @@ public class ConfiguracaoOtimaController {
 
     @FXML
     public void aplicar() {
-        cch.removerConfiguracao(configuracao.getId());
-
+        cch.removerConfiguracao(cch.getConfigAtual().getId());
+        //REMINDER WHEN READING GIT
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informação");
         alert.setHeaderText("Configuração aplicada com sucesso!");

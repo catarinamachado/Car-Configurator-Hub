@@ -2,11 +2,7 @@ package CCH.business;
 
 import CCH.dataaccess.ConfiguracaoDAO;
 import CCH.dataaccess.EncomendaDAO;
-import CCH.exception.EncomendaRequerOutrosComponentes;
-import CCH.exception.EncomendaTemComponentesIncompativeis;
-import CCH.exception.EncomendaRequerObrigatoriosException;
-import CCH.exception.NoOptimalConfigurationException;
-import CCH.exception.ConfiguracaoNaoTemObrigatoriosException;
+import CCH.exception.*;
 import ilog.concert.IloException;
 
 import java.util.List;
@@ -24,7 +20,7 @@ import java.util.Map;
 public class GestaoDeConfiguracao {
 	private ConfiguracaoDAO configuracoes;
 	private EncomendaDAO encomendas;
-
+	private Configuracao configuracaoatual;
     /**
      * Construtor por omissão da GestaoDeConfiguracao.
      */
@@ -84,7 +80,6 @@ public class GestaoDeConfiguracao {
 	/**
 	 * Método que cria uma nova encomenda no sistema.
 	 *
-	 * @param configuracao Configuração que se pretende encomendar
 	 * @param nomeCliente Nome do cliente a que a encomenda corresponde
 	 * @param numeroDeIdentificacaoCliente Número de Identificação do cliente
 	 * @param moradaCliente Morada do cliente
@@ -98,17 +93,16 @@ public class GestaoDeConfiguracao {
 	 * os componentes obrigatórios
 	 */
 	public void criarEncomenda(
-				Configuracao configuracao,
-				String nomeCliente,
-				String numeroDeIdentificacaoCliente,
-				String moradaCliente,
-				String paisCliente,
-				String emailCliente
-	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
-		Map<Integer, Componente> componentes = configuracao.verificaValidade();
+            String nomeCliente,
+            String numeroDeIdentificacaoCliente,
+            String moradaCliente,
+            String paisCliente,
+            String emailCliente
+    ) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
+		Map<Integer, Componente> componentes = configuracaoatual.verificaValidade();
 		int id = encomendas.getNextId();
 		Encomenda encomenda = new Encomenda(componentes, id,
-											configuracao.getPreco(), nomeCliente,
+											configuracaoatual.getPreco(), nomeCliente,
 											numeroDeIdentificacaoCliente, moradaCliente,
 											paisCliente, emailCliente);
 		encomendas.put(id, encomenda);
@@ -120,7 +114,6 @@ public class GestaoDeConfiguracao {
 	 *
 	 * @param componentes Todos os componentes presentes no sistema
 	 * @param pacotes Todos os pacotes presentes no sistema
-	 * @param configuracao Configuração que se pretende otimizar
 	 * @param valor Valor máximo disponível
 	 * @return Configuracao ótima gerada
 	 * @throws NoOptimalConfigurationException Caso a configuração que se pretende
@@ -128,13 +121,13 @@ public class GestaoDeConfiguracao {
 	 * @throws ConfiguracaoNaoTemObrigatoriosException Caso a configuração que se pretende
 	 * otimizar não contenha todos os componentes obrigatórios
 	 */
-	public Configuracao configuracaoOtima(Collection<Componente> componentes, Collection<Pacote> pacotes, Configuracao configuracao, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
+	public Configuracao configuracaoOtima(Collection<Componente> componentes, Collection<Pacote> pacotes, double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
 		if (valor < 0) {
 			throw new NoOptimalConfigurationException("Negative Value");
 		}
 
 		try {
-			configuracao.verificaValidade();
+			configuracaoatual.verificaValidade();
 		} catch (EncomendaTemComponentesIncompativeis encomendaTemComponentesIncompativeis) {
 			throw new NoOptimalConfigurationException();
 		} catch (EncomendaRequerOutrosComponentes encomendaRequerOutrosComponentes) {
@@ -144,7 +137,7 @@ public class GestaoDeConfiguracao {
 
 		ConfiguracaoOtima c = new ConfiguracaoOtima();
     
-		Collection<Componente> componentesObrigatorios = configuracoes.getComponentes(configuracao.getId()).values();
+		Collection<Componente> componentesObrigatorios = configuracoes.getComponentes(configuracaoatual.getId()).values();
 
 		try {
 			return c.configuracaoOtima(componentesObrigatorios,componentes,pacotes,valor);
@@ -170,5 +163,45 @@ public class GestaoDeConfiguracao {
 
 			configuracoes.updateDesconto(configuracaoId, descontoAtualizado);
 		}
+	}
+
+	public void removerComponente(int id) {
+		configuracaoatual.removerComponente(id);
+	}
+
+	public void removerPacoteConfig(int id) {
+		configuracaoatual.removerPacote(id);
+	}
+
+	public List<Componente> componentesRequeremMeNaConfig(int id) {
+		return configuracaoatual.componentesRequeremMeNaConfig(id);
+	}
+
+	public Configuracao getConfigAtual() {
+		return configuracaoatual;
+	}
+
+	public Pacote adicionarPacote(int id, Pacote p) throws PacoteJaAdicionadoException {
+		return configuracaoatual.adicionarPacote(id,p);
+	}
+
+	public List<Componente> componentesRequeridosQueNaoEstaoConfig(Map<Integer, Componente> comps) {
+		return configuracaoatual.componentesRequeridosQueNaoEstaoConfig(comps);
+	}
+
+	public List<Componente> componentesIncompativeisNaConfig(Map<Integer, Componente> comps) {
+		return configuracaoatual.componentesIncompativeisNaConfig(comps);
+	}
+
+	public void adicionarComponenten(int id) throws ComponenteJaAdicionadoException {
+		configuracaoatual.adicionarComponente(id);
+	}
+
+	public boolean checkforPacotesInConfiguration() {
+		return configuracaoatual.checkforPacotesInConfiguration();
+	}
+
+	public void loadConfigAtual(int id) {
+		configuracaoatual = configuracoes.get(id);
 	}
 }
