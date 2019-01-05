@@ -181,8 +181,6 @@ public class ConfiguracaoOtimaController {
     public void aplicar() {
         cch.removerConfiguracao(cch.getConfigAtual().getId());
         accepted = true;
-        //REMINDER WHEN READING GIT
-        cch.updateConfiguracao(configuracaoGerada);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informação");
         alert.setHeaderText("Configuração aplicada com sucesso!");
