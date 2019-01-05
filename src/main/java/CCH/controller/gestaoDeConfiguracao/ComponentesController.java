@@ -26,12 +26,12 @@ public class ComponentesController {
     @FXML
     public Button back;
 
+    private CCH cch = CarConfiguratorHubApplication.getCch();
+
     private static Configuracao configuracao;
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
-
-    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void initialize() {

@@ -1,9 +1,7 @@
 package CCH.controller.gestaoDeConfiguracao;
 
-import CCH.CarConfiguratorHubApplication;
 import CCH.business.Componente;
 import CCH.business.Configuracao;
-import CCH.business.GestaoDeConfiguracao;
 import CCH.business.Pacote;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,9 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class ConfiguracaoController {
@@ -34,11 +30,10 @@ public class ConfiguracaoController {
     public TableView tablepacs;
 
     private static Configuracao configuracao;
+
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
-
-    private GestaoDeConfiguracao gestaoDeConfiguracao = CarConfiguratorHubApplication.getCch().getGestaoDeConfiguracao();
 
     @FXML
     public void initialize() {

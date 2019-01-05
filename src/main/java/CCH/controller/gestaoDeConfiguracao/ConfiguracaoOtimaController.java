@@ -37,13 +37,11 @@ public class ConfiguracaoOtimaController {
 
     private static Configuracao configuracao;
     private Configuracao configuracaoGerada;
+    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
     }
-
-    private CCH cch = CarConfiguratorHubApplication.getCch();
-    private GestaoDeConfiguracao gestaoDeConfiguracao = CarConfiguratorHubApplication.getCch().getGestaoDeConfiguracao();
 
     @FXML
     public void initialize() {
@@ -178,7 +176,7 @@ public class ConfiguracaoOtimaController {
 
     @FXML
     public void aplicar() {
-        gestaoDeConfiguracao.removerConfiguracao(configuracao.getId());
+        cch.removerConfiguracao(configuracao.getId());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informação");

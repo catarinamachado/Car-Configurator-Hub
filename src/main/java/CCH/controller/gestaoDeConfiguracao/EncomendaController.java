@@ -1,9 +1,8 @@
 package CCH.controller.gestaoDeConfiguracao;
 
 import CCH.CarConfiguratorHubApplication;
+import CCH.business.CCH;
 import CCH.business.Configuracao;
-import CCH.business.Encomenda;
-import CCH.business.GestaoDeConfiguracao;
 import CCH.exception.EncomendaRequerObrigatoriosException;
 import CCH.exception.EncomendaRequerOutrosComponentes;
 import CCH.exception.EncomendaTemComponentesIncompativeis;
@@ -27,12 +26,12 @@ public class EncomendaController {
         configuracao = newConfiguracao;
     }
 
-    private GestaoDeConfiguracao gestaoDeConfiguracao = CarConfiguratorHubApplication.getCch().getGestaoDeConfiguracao();
+    private CCH cch = CarConfiguratorHubApplication.getCch();
 
     @FXML
     public void criarEncomenda() {
         try {
-            gestaoDeConfiguracao.criarEncomenda(
+            cch.criarEncomenda(
                     configuracao,
                     nome.getText(),
                     id.getText(),

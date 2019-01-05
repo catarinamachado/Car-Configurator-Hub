@@ -8,6 +8,7 @@ import CCH.exception.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe principal da aplicação Car Configurator Hub.
@@ -221,6 +222,15 @@ public class CCH {
 	}
 
 	/**
+	 * Método que devolve todos as configurações no sistema.
+	 *
+	 * @return List<Configurações> Lista de todos as configurações no sistema
+	 */
+	public List<Configuracao> consultarConfiguracoes() {
+		return gestaoDeConfiguracao.consultarConfiguracoes();
+	}
+
+	/**
 	 * Método que gera uma configuração ótima, ou seja, uma configuração que tenta
 	 * maximizar a utilização do dinheiro previsto.
 	 *
@@ -260,6 +270,16 @@ public class CCH {
 	}
 
 	/**
+	 * Método que remove a configuração com o id passado como parâmetro
+	 * do sistema.
+	 *
+	 * @param configuracaoId Id da configuração que se pretende remover
+	 */
+	public void removerConfiguracao(int configuracaoId) {
+		gestaoDeConfiguracao.removerConfiguracao(configuracaoId);
+	}
+
+	/**
 	 * Método que adiciona um determinado componente a um determinado pacote.
 	 *
 	 * @param pacote Pacote em questão
@@ -271,6 +291,42 @@ public class CCH {
 	 */
 	public void adicionarComponenteAoPacote(Pacote pacote, int componente_id) throws ComponenteJaExisteNoPacoteException, ComponenteIncompativelNoPacoteException {
 		pacote.adicionaComponente(componente_id);
+	}
+
+	/**
+	 * Método que cria uma nova configuração.
+	 *
+	 */
+	public void criarConfiguracao() {
+		gestaoDeConfiguracao.criarConfiguracao();
+	}
+
+	/**
+	 * Método que cria uma nova encomenda no sistema.
+	 *
+	 * @param configuracao Configuração que se pretende encomendar
+	 * @param nomeCliente Nome do cliente a que a encomenda corresponde
+	 * @param numeroDeIdentificacaoCliente Número de Identificação do cliente
+	 * @param moradaCliente Morada do cliente
+	 * @param paisCliente País do cliente
+	 * @param emailCliente E-mail do cliente
+	 * @throws EncomendaTemComponentesIncompativeis Se a configuração tem componentes
+	 * incompatíveis
+	 * @throws EncomendaRequerOutrosComponentes Se existem componentes na configuração
+	 * que requerem outros componentes que não estão presentes na mesma
+	 * @throws EncomendaRequerObrigatoriosException Se a configuração não tem todos
+	 * os componentes obrigatórios
+	 */
+	public void criarEncomenda(
+			Configuracao configuracao,
+			String nomeCliente,
+			String numeroDeIdentificacaoCliente,
+			String moradaCliente,
+			String paisCliente,
+			String emailCliente
+	) throws EncomendaRequerOutrosComponentes, EncomendaTemComponentesIncompativeis, EncomendaRequerObrigatoriosException {
+		gestaoDeConfiguracao.criarEncomenda(configuracao, nomeCliente, numeroDeIdentificacaoCliente, moradaCliente,
+											  paisCliente, emailCliente);
 	}
 }
 
