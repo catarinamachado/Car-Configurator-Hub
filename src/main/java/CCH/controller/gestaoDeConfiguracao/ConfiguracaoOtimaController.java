@@ -38,6 +38,7 @@ public class ConfiguracaoOtimaController {
     //private static Configuracao configuracao;
     private Configuracao configuracaoGerada;
     private CCH cch = CarConfiguratorHubApplication.getCch();
+    private boolean accepted = false;
 /*
     public static void setConfiguracao(Configuracao newConfiguracao) {
         configuracao = newConfiguracao;
@@ -179,7 +180,9 @@ public class ConfiguracaoOtimaController {
     @FXML
     public void aplicar() {
         cch.removerConfiguracao(cch.getConfigAtual().getId());
+        accepted = true;
         //REMINDER WHEN READING GIT
+        cch.updateConfiguracao(configuracaoGerada);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informação");
         alert.setHeaderText("Configuração aplicada com sucesso!");
@@ -189,6 +192,8 @@ public class ConfiguracaoOtimaController {
 
     @FXML
     public void back() {
+        if (configuracaoGerada != null && !accepted)
+            cch.removerConfiguracao(configuracaoGerada.getId());
         ((Stage) back.getScene().getWindow()).close();
     }
 }
