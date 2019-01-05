@@ -30,6 +30,7 @@ public class OperacaoFabril {
 	}
 
 	/**
+
 	 * Devolve todos os componentes do sistema.
 	 *
 	 * @return List<Componente> lista com todos os componentes presentes no sistema

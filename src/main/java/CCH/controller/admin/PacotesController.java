@@ -173,7 +173,7 @@ public class PacotesController {
     public void updateDesconto(TableColumn.CellEditEvent<Pacote, String> event) {
         Pacote pacote = event.getTableView().getItems().get(event.getTablePosition().getRow());
         pacote.setDesconto(Integer.parseInt(event.getNewValue()));
-        pacote.atualizarDesconto(pacote);
+        cch.atualizarDesconto(pacote);
 
         table.refresh();
     }

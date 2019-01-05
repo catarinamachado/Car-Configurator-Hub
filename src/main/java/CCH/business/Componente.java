@@ -22,10 +22,15 @@ public class Componente implements RemoteClass<Integer> {
 	private double preco;
 	private String nome;
 
-	private ComponenteDAO componenteDAO = null;
-	private ClasseComponenteDAO classeComponenteDAO = null;
+	private ComponenteDAO componenteDAO;
+	private ClasseComponenteDAO classeComponenteDAO = new ClasseComponenteDAO();
 
 	public Componente() {
+		this.classeComponente = new ClasseComponente(-1, false, "", TipoComponente.Motor);
+		this.id = 0;
+		this.stock = 0;
+		this.preco = 0.0;
+		this.nome = "";
 	}
 
 	/**
@@ -38,22 +43,20 @@ public class Componente implements RemoteClass<Integer> {
 	 * @param classeComponente Classe em que se insere o componente
 	 */
 	public Componente(int id, int stock, double preco, String nome, ClasseComponente classeComponente) {
+		this.componenteDAO = new ComponenteDAO(this);
 		this.id = id;
 		this.stock = stock;
 		this.preco = preco;
 		this.nome = nome;
 		this.classeComponente = classeComponente;
-		this.componenteDAO = new ComponenteDAO();
-		this.classeComponenteDAO = new ClasseComponenteDAO();
 	}
 
 	public Componente(List<String> rs){
+		this.componenteDAO = new ComponenteDAO(this);
 	    this.id = Integer.valueOf(rs.get(0));
 	    this.stock = Integer.valueOf(rs.get(1));
 	    this.preco = Double.valueOf(rs.get(2));
 	    this.nome = rs.get(3);
-		  this.componenteDAO = new ComponenteDAO();
-		  this.classeComponenteDAO = new ClasseComponenteDAO();
 	    this.classeComponente = this.classeComponenteDAO.get(Integer.valueOf(rs.get(4)));
     }
 

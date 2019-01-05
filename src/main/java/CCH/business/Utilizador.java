@@ -23,8 +23,6 @@ public class Utilizador implements RemoteClass<Integer> {
 	private String password;
 	private TipoUtilizador tipoUtilizador;
 
-	private UtilizadorDAO utilizadorDAO;
-
 	public Utilizador() {
 	}
 
@@ -34,9 +32,8 @@ public class Utilizador implements RemoteClass<Integer> {
 	 * @param nome Nome do utilizador
 	 * @param password Password do utilizador
 	 */
-	public Utilizador(String nome, String password) {
-		this.utilizadorDAO = new UtilizadorDAO();
-		this.id = utilizadorDAO.getNextId();
+	public Utilizador(Integer id, String nome, String password) {
+
 		this.nome = nome;
 		this.password = password;
 		this.tipoUtilizador = TipoUtilizador.STAND; //default
@@ -55,7 +52,7 @@ public class Utilizador implements RemoteClass<Integer> {
 		this.nome = nome;
 		this.password = password;
 		this.tipoUtilizador = tipoUtilizador;
-		this.utilizadorDAO = new UtilizadorDAO();
+
 	}
 
 	public Utilizador(List<String> rs) {
@@ -63,7 +60,7 @@ public class Utilizador implements RemoteClass<Integer> {
 		this.nome = rs.get(1);
 		this.password = rs.get(2);
 		this.tipoUtilizador = TipoUtilizador.withValue(Integer.valueOf(rs.get(3)));
-		this.utilizadorDAO = new UtilizadorDAO();
+
 	}
 
 	/**
@@ -228,33 +225,6 @@ public class Utilizador implements RemoteClass<Integer> {
 			return 2;
 		else
 			throw new TipoUtilizadorInexistenteException();
-	}
-
-	/**
-	 * Atualiza o nome do utilizador (incluindo na base de dados).
-	 *
-	 * @param utilizador Objeto utilizador já com as informações novas
-	 */
-	public void atualizarUser(Utilizador utilizador) {
-		utilizadorDAO.updateUser(utilizador);
-	}
-
-	/**
-	 * Atualiza a password do utilizador (incluindo na base de dados).
-	 *
-	 * @param utilizador Objeto utilizador já com as informações novas
-	 */
-	public void atualizarPassword(Utilizador utilizador) {
-		utilizadorDAO.updatePassword(utilizador);
-	}
-
-	/**
-	 * Atualiza o tipo do utilizador (incluindo na base de dados).
-	 *
-	 * @param utilizador Objeto utilizador já com as informações novas
-	 */
-	public void atualizarTipo(Utilizador utilizador) {
-		utilizadorDAO.updateTipo(utilizador);
 	}
 
 }

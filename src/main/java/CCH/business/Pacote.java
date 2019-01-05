@@ -1,5 +1,6 @@
 package CCH.business;
 
+import CCH.dataaccess.ComponenteDAO;
 import CCH.dataaccess.PacoteDAO;
 import CCH.dataaccess.RemoteClass;
 import CCH.exception.ComponenteIncompativelNoPacoteException;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class Pacote implements RemoteClass<Integer> {
 	private int id;
 	private double desconto;
-	private PacoteDAO pacoteDAO;
+	private ComponenteDAO componenteDAO = new ComponenteDAO();
 
 	/**
 	 * Construtor por omissão do Pacote.
@@ -36,11 +37,15 @@ public class Pacote implements RemoteClass<Integer> {
 	 * @param desconto Desconto associado ao pacote
 	 */
 	public Pacote(int id, double desconto) {
-		this.pacoteDAO = new PacoteDAO();
 		this.id = id;
 		this.desconto = desconto;
 	}
-  
+
+	public Pacote(List<String> rs){
+		this.id = Integer.valueOf(rs.get(0));
+		this.desconto = Double.valueOf(rs.get(1));
+	}
+
 	/**
 	 * Devolve o id do pacote.
 	 *
@@ -104,14 +109,7 @@ public class Pacote implements RemoteClass<Integer> {
 	 * no pacote
 	 */
 	public Map<Integer, Componente> getComponentes() {
-		return pacoteDAO.getComponentes(id);
-	}
-
-
-	public Pacote(List<String> rs){
-		this.id = Integer.valueOf(rs.get(0));
-		this.desconto = Double.valueOf(rs.get(1));
-		this.pacoteDAO = new PacoteDAO();
+		return componenteDAO.getComponentesPacote(id);
 	}
 
 	/**
@@ -124,19 +122,24 @@ public class Pacote implements RemoteClass<Integer> {
 	 * no pacote que seja incompatível com o componente que se pretende adicionar
 	 */
 
+	/*fora*********************************************************************/
 	public void adicionaComponente(int componenteId) throws ComponenteJaExisteNoPacoteException,
 															ComponenteIncompativelNoPacoteException {
-		boolean alreadyHas = pacoteDAO.getAllIdsComponentesNoPacote(this.id).contains(componenteId);
+
+		Map<Integer,Componente> mComp =  componenteDAO.getComponentesPacote(this.id);
+
+		boolean alreadyHas = mComp.containsKey(componenteId);
+
 		if (alreadyHas)
 			throw new ComponenteJaExisteNoPacoteException();
 
-		for (Componente c : pacoteDAO.getAllComponentesNoPacote(this.id)) {
+		for (Componente c : mComp.values()) {
 			if (c.getIncompativeis() != null && c.getIncompativeis().containsKey(componenteId))
 				throw new ComponenteIncompativelNoPacoteException(c.getFullName());
 
 		}
 
-		pacoteDAO.adicionaComponente(this.id, componenteId);
+		componenteDAO.adicionaComponentePacote(this.id, componenteId);
 	}
 
 	/**
@@ -144,8 +147,10 @@ public class Pacote implements RemoteClass<Integer> {
 	 *
 	 * @param componenteId Id do componente que se pretende remover
 	 */
+
+	/*fora*********************************************************************/
 	public void removeComponente(int componenteId) {
-		pacoteDAO.removeComponente(this.id, componenteId);
+		componenteDAO.removeComponentePacote(this.id, componenteId);
 	}
 
 	/**
@@ -166,14 +171,6 @@ public class Pacote implements RemoteClass<Integer> {
 		return Double.toString(this.desconto);
 	}
 
-	/**
-	 * Atualiza o desconto associado ao pacote (incluindo na base de dados).
-	 *
-	 * @param pacote Objeto pacote já com as informações novas
-	 */
-	public void atualizarDesconto(Pacote pacote) {
-		pacoteDAO.updateDesconto(pacote);
-	}
 
 	@Override
 	public String toString() {

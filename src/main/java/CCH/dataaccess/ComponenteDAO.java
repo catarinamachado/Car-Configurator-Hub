@@ -1,5 +1,6 @@
 package CCH.dataaccess;
 
+import CCH.business.ClasseComponente;
 import CCH.business.Componente;
 
 import java.sql.ResultSet;
@@ -13,6 +14,14 @@ public class ComponenteDAO extends GenericDAOClass<Integer> {
                 new Componente(),
                 Arrays.asList(new String[]{"id","stock","preco","nome","ClasseComponente_id"}));
     }
+
+    public ComponenteDAO ( Componente c) {
+        super("Componente",
+                c,
+                Arrays.asList(new String[]{"id","stock","preco","nome","ClasseComponente_id"}));
+    }
+
+
 
     public Componente get(Object key) {
         return (Componente)super.get(key);
@@ -46,7 +55,7 @@ public class ComponenteDAO extends GenericDAOClass<Integer> {
 
             List<String> row;
             int col = rs.getMetaData().getColumnCount();
-            Componente token = new Componente();
+            Componente token = (Componente)getToken();
 
             while (rs.next()) {
 
@@ -65,6 +74,53 @@ public class ComponenteDAO extends GenericDAOClass<Integer> {
         }
     }
 
+    public Map<Integer,Componente> getComponentesPacote(Integer key) {
+        try {
+            Map<Integer,Componente> set = new HashMap<>();
+
+            Statement stm = conn.createStatement();
+
+            String sql = "SELECT C.* FROM Pacote_has_Componente as PC," +
+                    " Componente as C WHERE PC.Componente_id = C.id and PC.Pacote_id = " + key + " ;";
+
+            ResultSet rs = stm.executeQuery(sql);
+            List<String> row;
+            int col = rs.getMetaData().getColumnCount();
+            Componente token = (Componente)getToken();
+
+            while (rs.next()) {
+
+                row = new ArrayList<>();
+                for( int i = 1; i<= col; i++)
+                    row.add(rs.getString(i));
+
+                Componente n = token.fromRow(row);
+                set.put(n.getId(), n);
+            }
+
+
+            return set;
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
+    public void adicionaComponentePacote(Integer key_pacote, Integer key_componente) {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "INSERT Pacote_has_Componente VALUES (" + key_pacote + ", " + key_componente + ");";
+            stm.executeUpdate(sql);
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
+
+    public void removeComponentePacote(Integer key_pacote, Integer key_componente) {
+        try {
+            Statement stm = conn.createStatement();
+            String sql = "DELETE FROM Pacote_has_Componente WHERE Pacote_id = " + key_pacote + " and " + "Componente_id = " + key_componente;
+            stm.executeUpdate(sql);
+        }
+        catch (Exception e) {throw new NullPointerException(e.getMessage());}
+    }
 
     public Map<Integer, Componente> getComponentesRequeridos(Integer componenteId) {
         try {
@@ -76,7 +132,7 @@ public class ComponenteDAO extends GenericDAOClass<Integer> {
 
             List<String> row;
             int col = rs.getMetaData().getColumnCount();
-            Componente token = new Componente();
+            Componente token = (Componente)getToken();
 
             while (rs.next()) {
 

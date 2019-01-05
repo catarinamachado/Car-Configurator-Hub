@@ -74,8 +74,10 @@ public class ConfiguracaoOtimaController {
         if(configuracaoGerada!=null){
             ObservableList<Componente> componentes = FXCollections.observableArrayList();
             ObservableList<Pacote> pacotes = FXCollections.observableArrayList();
-            componentes.addAll(configuracaoGerada.componentesNotInPacotes().values());
-            pacotes.addAll(configuracaoGerada.consultarPacotes().values());
+
+            componentes.addAll(cch.getGestaoDeConfiguracao().componentesNotInPacotes().values());
+            pacotes.addAll(cch.getGestaoDeConfiguracao().consultarPacotes().values());
+
             table.setItems(componentes);
             tablepacs.setItems(pacotes);
         }
@@ -153,8 +155,8 @@ public class ConfiguracaoOtimaController {
 
         try {
             configuracaoGerada = cch.ConfiguracaoOtima(valorMaximo);
-            componentes.addAll(configuracaoGerada.componentesNotInPacotes().values());
-            pacotes.addAll(configuracaoGerada.consultarPacotes().values());
+            componentes.addAll(cch.getGestaoDeConfiguracao().componentesNotInPacotes().values());
+            pacotes.addAll(cch.getGestaoDeConfiguracao().consultarPacotes().values());
         } catch (NoOptimalConfigurationException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Informação");

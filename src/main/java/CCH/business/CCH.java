@@ -2,6 +2,7 @@ package CCH.business;
 
 import CCH.dataaccess.ComponenteDAO;
 import CCH.dataaccess.PacoteDAO;
+import CCH.dataaccess.RemoteClass;
 import CCH.dataaccess.UtilizadorDAO;
 import CCH.exception.*;
 
@@ -61,76 +62,6 @@ public class CCH {
 	 * encomendas.
 	 *
 	 * @return OperacaoFabril
-	 */
-	public OperacaoFabril getOperacaoFabril() {
-		return operacaoFabril;
-	}
-
-	/**
-	 * Atualiza a OperacaoFabril do sistema.
-	 *
-	 * @param operacaoFabril OperacaoFabril com as informações dos componentes e encomendas
-	 */
-	public void setOperacaoFabril(OperacaoFabril operacaoFabril) {
-		this.operacaoFabril = operacaoFabril;
-	}
-
-	/**
-	 * Devolve o UtilizadorDAO, que permite aceder às
-	 * informações dos utilizadores na base de dados.
-	 *
-	 * @return UtilizadorDAO
-	 */
-	public UtilizadorDAO getUtilizadorDAO() {
-		return utilizadorDAO;
-	}
-
-	/**
-	 * Atualiza o UtilizadorDAO do sistema.
-	 *
-	 * @param utilizadorDAO UtilizadorDAO com os devidos métodos para aceder à base de dados.
-	 */
-	public void setUtilizadorDAO(UtilizadorDAO utilizadorDAO) {
-		this.utilizadorDAO = utilizadorDAO;
-	}
-
-	/**
-	 * Devolve o PacoteDAO, que permite aceder às
-	 * informações dos pacotes na base de dados.
-	 *
-	 * @return PacoteDAO
-	 */
-	public PacoteDAO getPacoteDAO() {
-		return pacoteDAO;
-	}
-
-	/**
-	 * Atualiza o PacoteDAO do sistema.
-	 *
-	 * @param pacoteDAO PacoteDAO com os devidos métodos para aceder à base de dados.
-	 */
-	public void setPacoteDAO(PacoteDAO pacoteDAO) {
-		this.pacoteDAO = pacoteDAO;
-	}
-
-	/**
-	 * Devolve o ComponenteDAO, que permite aceder às
-	 * informações dos componentes na base de dados.
-	 *
-	 * @return ComponenteDAO
-	 */
-	public ComponenteDAO getComponenteDAO() {
-		return componenteDAO;
-	}
-
-	/**
-	 * Atualiza o ComponenteDAO do sistema.
-	 *
-	 * @param componenteDAO ComponenteDAO com os devidos métodos para aceder à base de dados.
-	 */
-	public void setComponenteDAO(ComponenteDAO componenteDAO) {
-		this.componenteDAO = componenteDAO;
-	}
 
 	/**
 	 * Método que permite que o utilizador aceda à aplicação.
@@ -184,7 +115,10 @@ public class CCH {
 	 * @return Utilizador criado
 	 */
 	public Utilizador criarUtilizador() {
-		Utilizador utilizador = new Utilizador("empty", "empty");
+
+
+		Integer id = utilizadorDAO.getNextId();
+		Utilizador utilizador = new Utilizador(id,"empty", "empty");
 		utilizador = utilizadorDAO.put(utilizador.getId(), utilizador);
 		return utilizador;
 	}
@@ -234,7 +168,7 @@ public class CCH {
 	 *
 	 * @return List<Configurações> Lista de todos as configurações no sistema
 	 */
-  
+
 	public List<Configuracao> consultarConfiguracoes() {
 		return gestaoDeConfiguracao.consultarConfiguracoes();
 	}
@@ -263,7 +197,9 @@ public class CCH {
 	 * @return List<Componente> Lista dos componentes no pacote
 	 */
 	public List<Componente> consultarComponentesNoPacote(int pacote_id) {
-		return new ArrayList<>(pacoteDAO.getAllComponentesNoPacote(pacote_id));
+
+		Pacote p = pacoteDAO.get(pacote_id);
+		return new ArrayList<>(p.getComponentes().values());
 	}
 
 	/**
@@ -280,6 +216,9 @@ public class CCH {
 	 * Método que gera uma configuração ótima, ou seja, uma configuração que tenta
 	 * maximizar a utilização do dinheiro previsto.
 	 *
+
+	 * configuração ótima
+
 	 * @param valor Valor máximo que o cliente está disposto a gastar
 	 * @return Configuracao ótima gerada
 	 * @throws NoOptimalConfigurationException Caso não exista nenhuma configuração
@@ -287,9 +226,17 @@ public class CCH {
 	 * @throws ConfiguracaoNaoTemObrigatoriosException Caso a configuração não
 	 * contenha os componentes básicos (obrigatórios)
 	 */
+
 	public Configuracao ConfiguracaoOtima(double valor) throws NoOptimalConfigurationException, ConfiguracaoNaoTemObrigatoriosException {
-		Collection<Pacote> pacs = pacoteDAO.values();
-		Collection<Componente> comps = componenteDAO.values();
+		Collection<RemoteClass<Integer>> pacsIds = pacoteDAO.values();
+		Collection<RemoteClass<Integer>> compsIds = componenteDAO.values();
+
+		ArrayList<Pacote> pacs = new ArrayList<>();
+		pacsIds.forEach(id -> pacs.add(pacoteDAO.get(id.key())));
+
+		ArrayList<Componente> comps = new ArrayList<>();
+		compsIds.forEach(id -> comps.add(componenteDAO.get(id.key())));
+
 		return gestaoDeConfiguracao.configuracaoOtima(comps,pacs,valor);
 	}
 
@@ -310,6 +257,7 @@ public class CCH {
 	/**
 	 * Método que cria uma nova encomenda no sistema.
 	 *
+
 	 * @param nomeCliente Nome do cliente a que a encomenda corresponde
 	 * @param numeroDeIdentificacaoCliente Número de Identificação do cliente
 	 * @param moradaCliente Morada do cliente
@@ -406,5 +354,14 @@ public class CCH {
 	public void loadConfigAtual(int id) {
 		gestaoDeConfiguracao.loadConfigAtual(id);
 	}
+
+	public void atualizarUser(Utilizador u){
+		this.utilizadorDAO.update(u.key(),u);
+	}
+
+	public void atualizarDesconto(Pacote p){
+		this.pacoteDAO.updateDesconto(p);
+	}
+
 }
 

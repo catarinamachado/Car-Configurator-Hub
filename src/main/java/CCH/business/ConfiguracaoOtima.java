@@ -1,5 +1,6 @@
 package CCH.business;
 
+import CCH.CarConfiguratorHubApplication;
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
 
@@ -168,7 +169,9 @@ public class ConfiguracaoOtima {
                 if(cplex.getValue(cvar) == 1)
                     componentesAceitados.add(c);
             }
-            Configuracao otima = new Configuracao(pacotesAceitados,componentesAceitados);
+            Configuracao otima = CarConfiguratorHubApplication.getCch()
+                    .getGestaoDeConfiguracao()
+                    .newConfiguracao(pacotesAceitados,componentesAceitados);
 
             return otima;
         }

@@ -137,7 +137,7 @@ public class FuncionariosController {
     public void updateUser(TableColumn.CellEditEvent<Utilizador, String> event) {
         Utilizador utilizador = event.getTableView().getItems().get(event.getTablePosition().getRow());
         utilizador.setNome(event.getNewValue());
-        utilizador.atualizarUser(utilizador);
+        cch.atualizarUser(utilizador);
 
         table.refresh();
     }
@@ -146,7 +146,7 @@ public class FuncionariosController {
     public void updatePassword(TableColumn.CellEditEvent<Utilizador, String> event) {
         Utilizador utilizador = event.getTableView().getItems().get(event.getTablePosition().getRow());
         utilizador.setPassword(event.getNewValue());
-        utilizador.atualizarPassword(utilizador);
+        cch.atualizarUser(utilizador);
 
         table.refresh();
     }
@@ -158,7 +158,7 @@ public class FuncionariosController {
         try {
             int value = utilizador.parseNomeTipoToValue(event.getNewValue());
             utilizador.setTipoUtilizadorValue(value);
-            utilizador.atualizarTipo(utilizador);
+            cch.atualizarUser(utilizador);
         }
         catch (TipoUtilizadorInexistenteException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

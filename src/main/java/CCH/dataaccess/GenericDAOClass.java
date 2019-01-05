@@ -20,6 +20,10 @@ public abstract class GenericDAOClass<K> implements Map<K, RemoteClass<K>> {
         this.colname = colname;
     }
 
+    public RemoteClass<K> getToken() {
+        return token;
+    }
+
     public int getNextId() {
         try {
             Statement stm = conn.createStatement();

@@ -82,14 +82,14 @@ public class ConfiguracaoController {
     private ObservableList<Pacote> getPacotes() {
         ObservableList<Pacote> pacotes = FXCollections.observableArrayList();
         Configuracao configuracao = cch.getConfigAtual();
-        pacotes.addAll(configuracao.consultarPacotes().values());
+        pacotes.addAll(cch.getGestaoDeConfiguracao().consultarPacotes().values());
         return pacotes;
     }
 
     private ObservableList<Componente> getComponentes() {
         ObservableList<Componente> componentes = FXCollections.observableArrayList();
         Configuracao configuracao = cch.getConfigAtual();
-        componentes.addAll(configuracao.componentesNotInPacotes().values());
+        componentes.addAll(cch.getGestaoDeConfiguracao().componentesNotInPacotes().values());
         return componentes;
     }
 
