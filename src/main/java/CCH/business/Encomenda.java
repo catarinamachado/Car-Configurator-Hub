@@ -57,6 +57,7 @@ public class Encomenda implements RemoteClass<Integer> {
 		this.moradaCliente = row.get(3);
 		this.paisCliente = row.get(4);
 		this.emailCliente = row.get(5);
+		this.preco = Double.valueOf(row.get(6));
 	}
 	/**
 	 * Construtor parametrizado mais completo da Encomenda.
@@ -72,6 +73,7 @@ public class Encomenda implements RemoteClass<Integer> {
 	 */
 	public Encomenda(Map<Integer, Componente> componentes, int id, double preco, String nomeCliente, String numeroDeIdentificacaoCliente, String moradaCliente, String paisCliente, String emailCliente) {
 		this.componentes = componentes;
+
 		this.id = id;
 		this.preco = preco;
 		this.nomeCliente = nomeCliente;
@@ -124,6 +126,7 @@ public class Encomenda implements RemoteClass<Integer> {
 		l.add(this.moradaCliente);
 		l.add(this.paisCliente);
 		l.add(this.emailCliente);
+		l.add(String.valueOf(this.preco));
 		return l;
 	}
 

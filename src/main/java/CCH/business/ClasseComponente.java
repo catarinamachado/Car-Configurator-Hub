@@ -34,9 +34,9 @@ public class ClasseComponente implements RemoteClass<Integer> {
 		this.tipoComponente = tipoComponente;
 	}
   
-  public ClasseComponente(List<String> rs){
+  	public ClasseComponente(List<String> rs){
 		this.id = Integer.valueOf(rs.get(0));
-		this.eObrigatorio = Boolean.valueOf(rs.get(1));
+		this.eObrigatorio = Integer.valueOf(rs.get(1)).equals(1);
 		this.nome= rs.get(2);
 		this.tipoComponente = TipoComponente.withValue(Integer.valueOf(rs.get(3)));
 	}
@@ -67,7 +67,7 @@ public class ClasseComponente implements RemoteClass<Integer> {
 	public List<String> toRow() {
 		List<String> l = new LinkedList<String>();
 		l.add(String.valueOf(this.id));
-		l.add(String.valueOf(this.eObrigatorio));
+		if(this.eObrigatorio) l.add("1"); else l.add("0");
 		l.add(this.nome);
 		l.add(String.valueOf(this.tipoComponente.getValue()));
 		return l;

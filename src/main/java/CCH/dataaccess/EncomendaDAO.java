@@ -24,14 +24,21 @@ public class EncomendaDAO extends GenericDAOClass<Integer> {
 
     public Map<Integer,Encomenda> getAllEncomenda() {
         Map<Integer, RemoteClass<Integer>> a = super.getAll();
+
         Map<Integer, Encomenda> r = new HashMap<>();
         a.forEach((k,v) -> r.put(k, (Encomenda) v));
         return r;
     }
-
+    //***** modified
     public Encomenda put(Integer key, Encomenda value){
-        return (Encomenda)super.put(key,value);
+        super.put(key,value);
+
+        for(Integer compid : value.getComponentes().keySet())
+            this.putComponente(key,compid);
+
+        return value;
     }
+    //***** modified
 
     public Encomenda remove(Object key){
         return (Encomenda)super.remove(key);
@@ -42,9 +49,8 @@ public class EncomendaDAO extends GenericDAOClass<Integer> {
             Map<Integer, Componente> componentes = new HashMap<>();
             Statement stm = conn.createStatement();
             String sql = "SELECT C.* FROM Encomenda_has_Componente as EC " +
-                    ", Componente as C WHERE Encomenda_id=" + encomendaId + " and EC.componente_id = C.id;";
+                    ", Componente as C WHERE EC.Encomenda_id=" + encomendaId + " and EC.componente_id = C.id;";
             ResultSet rs = stm.executeQuery(sql);
-
             List<String> row;
             int col = rs.getMetaData().getColumnCount();
             Componente token = new Componente();

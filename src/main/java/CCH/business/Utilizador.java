@@ -33,7 +33,7 @@ public class Utilizador implements RemoteClass<Integer> {
 	 * @param password Password do utilizador
 	 */
 	public Utilizador(Integer id, String nome, String password) {
-
+		this.id = id;
 		this.nome = nome;
 		this.password = password;
 		this.tipoUtilizador = TipoUtilizador.STAND; //default
