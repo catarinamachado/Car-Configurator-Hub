@@ -1,5 +1,7 @@
 # Car Configurator Hub
-Trabalho prático da disciplina de Desenvolvimento de Sistemas de Software
+Development of Software Systems University Project.
+
+Check the final report [here](https://github.com/catarinamachado/Car-Configurator-Hub/blob/master/report.pdf).
 
 
 ## Authors
